@@ -5,6 +5,7 @@ import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,14 +17,17 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+
     @Override
     public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.orElse(null);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElse(null);
     }
 
     @Override
