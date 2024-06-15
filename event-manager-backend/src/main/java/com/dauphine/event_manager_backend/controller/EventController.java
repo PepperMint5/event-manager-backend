@@ -4,32 +4,39 @@ import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @Tag(
-        name = "Event Controller",
-        description = "Operations related to Event management"
+        name = "Event API",
+        description = "Endpoints for events"
 )
 @RequestMapping("/v1/events")
 public class EventController {
+    private final EventService eventService;
 
-    private EventService eventService;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @GetMapping
     @Operation(
             summary = "Get all events endpoint",
-            description = "Return all events"
+            description = "Return all events, or all with a name like {name}"
     )
-    public ResponseEntity<List<Event>> getAll()  {
-        List<Event> events = eventService.getAll();
+    public ResponseEntity<List<Event>> getAll(@RequestParam(required = false) String title)  {
+        List<Event> events = title == null | (title!=null && title.isBlank())
+                ? eventService.getAll()
+                : eventService.getAllLikeTitle(title);
         return ResponseEntity.ok(events);
     }
+
     //@Operation(summary = "Get Event by ID")
     //@GetMapping("/{id}")
     //public ResponseEntity<?> getEventById(@PathVariable UUID id) {

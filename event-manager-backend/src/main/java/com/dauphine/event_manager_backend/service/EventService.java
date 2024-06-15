@@ -1,5 +1,6 @@
 package com.dauphine.event_manager_backend.service;
 
+import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 
 import java.util.List;
@@ -9,5 +10,8 @@ import java.util.UUID;
 public interface EventService {
     public List<Event> getAll();
 
+    public List<Event> getAllLikeTitle(String title);
+
     Optional<Event> getById(UUID id);
+
 }
