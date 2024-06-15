@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @Tag(
@@ -33,5 +36,15 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAll()  {
         List<Category> categories = categoryService.getAll();
         return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("{id}")
+    @Operation(
+            summary = "Get category by id",
+            description = "Return category by id"
+    )
+    public ResponseEntity<Optional<Category>> getById(@PathVariable UUID id) {
+        Optional<Category> category = categoryService.getById(id);
+        return ResponseEntity.ok(category);
     }
 }
