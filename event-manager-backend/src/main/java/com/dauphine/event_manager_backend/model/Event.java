@@ -1,13 +1,13 @@
 package com.dauphine.event_manager_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "event" )
+@Table(name = "event")
 public class Event {
     @Id
     @Column(name = "id")
@@ -16,28 +16,114 @@ public class Event {
     @Column(name = "title")
     private String title;
 
-    @Column(name= "city")
+    @Column(name = "city")
     private String city;
 
-    @Column(name= "address")
-    private String address;
+    @Column(name = "address")
+    private String adress;
 
-    @Column(name= "date")
-    private Date date;
+    @Column(name = "date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime date;
 
-    @Column(name= "time")
-    private LocalDateTime time;
-
-    @Column(name= "description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "owner", referencedColumnName = "id")
-    private User owner;
+    @JoinColumn(name = "owner_id")
+    private User user;
 
+    public UUID getId() {
+        return id;
+    }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Event(String title, String city, String adress, LocalDateTime date, String description, Category category, User user) {
+        this.title = title;
+        this.city = city;
+        this.adress = adress;
+        this.date = date;
+        this.description = description;
+        this.category = category;
+        this.user = user;
+    }
+
+    public Event(){}
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", city='" + city + '\'' +
+                ", adress='" + adress + '\'' +
+                ", date=" + date +
+                ", description='" + description + '\'' +
+                ", category=" + category +
+                ", user=" + user +
+                '}';
+    }
 }
