@@ -1,5 +1,6 @@
 package com.dauphine.event_manager_backend.controller;
 
+import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -43,8 +43,7 @@ public class CategoryController {
             summary = "Get category by id",
             description = "Return category by id"
     )
-    public ResponseEntity<Optional<Category>> getById(@PathVariable UUID id) {
-        Optional<Category> category = categoryService.getById(id);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<Category> getById(@PathVariable UUID id) throws CategoryNotFoundByIdException {
+        return ResponseEntity.ok(categoryService.getById(id));
     }
 }

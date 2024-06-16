@@ -1,5 +1,7 @@
 package com.dauphine.event_manager_backend.service.impl;
 
+import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.User;
@@ -7,8 +9,6 @@ import com.dauphine.event_manager_backend.repository.CategoryRepository;
 import com.dauphine.event_manager_backend.repository.EventRepository;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.EventService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,8 +40,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> getEventById(UUID id) {
-        return eventRepository.findById(id);
+    public Event getEventById(UUID id) throws EventNotFoundByIdException {
+        return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundByIdException(id));
     }
 
     @Override
@@ -62,43 +62,32 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-
     @Override
-    public void deleteById(UUID userId, UUID id) {
-        Optional<Event> optionalEvent = getEventById(id);
-            if (optionalEvent.isPresent()) {
-                if (userId != optionalEvent.get().getId()) {
-                    eventRepository.deleteById(id);
-                    return;
-                }
-                else {
-                    throw new RuntimeException("User not authorized to delete");
-                }
-            } else {
-                throw new RuntimeException("Event with following id not found : " + id);
-            }
+    public void deleteById(UUID id) throws EventNotFoundByIdException {
+        getEventById(id);
+        eventRepository.deleteById(id);
     }
 
+    @Override
+    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
+        Event event = getEventById(eventId);
+        event.setTitle(title);
+        event.setCity(city);
+        event.setAddress(address);
+        event.setDate(date);
+        event.setDescription(description);
+        event.setCategory(category);
+        return eventRepository.save(event);
+    }
 
     @Override
-    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) {
-        Optional<Event> optionalEvent = getEventById(categoryId);
-        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-        if (optionalEvent.isPresent() && optionalCategory.isPresent()) {
-            Event event = optionalEvent.get();
-            event.setTitle(title);
-            event.setCity(city);
-            event.setAddress(address);
-            event.setDate(date);
-            event.setDescription(description);
-            event.setCategory(optionalCategory.get());
-            return event;
-        }
-        else if (optionalEvent.isEmpty()) {
-            throw new RuntimeException("Event with following id not found : " + eventId);
-        }
-        else {
-            throw new RuntimeException("Category with following id not found : " + categoryId);
-        }
+    public List<Event> getAllLikeUserId(UUID id) {
+        return eventRepository.getAllLikeUserId(id);
+    }
+
+    @Override
+    public List<Event> getAllLikeCategoryId(UUID id) {
+        return eventRepository.getAllLikeCategoryId(id);
     }
 }
