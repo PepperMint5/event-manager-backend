@@ -20,9 +20,9 @@ public class Event {
     private String city;
 
     @Column(name = "address")
-    private String adress;
+    private String address;
 
-    @Column(name = "date")
+    @Column(name = "date", columnDefinition="DATE")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime date;
 
@@ -61,12 +61,12 @@ public class Event {
         this.city = city;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public LocalDateTime getDate() {
@@ -101,10 +101,11 @@ public class Event {
         this.user = user;
     }
 
-    public Event(String title, String city, String adress, LocalDateTime date, String description, Category category, User user) {
+    public Event(String title, String city, String address, LocalDateTime date, String description, Category category, User user) {
+        this.id = UUID.randomUUID();
         this.title = title;
         this.city = city;
-        this.adress = adress;
+        this.address = address;
         this.date = date;
         this.description = description;
         this.category = category;
@@ -119,7 +120,7 @@ public class Event {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", city='" + city + '\'' +
-                ", adress='" + adress + '\'' +
+                ", address='" + address + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
                 ", category=" + category +
