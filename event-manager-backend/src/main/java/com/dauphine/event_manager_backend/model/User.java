@@ -20,6 +20,14 @@ public class User {
     @Column(name= "password")
     private String password;
 
+    public  User(){}
+
+    public User(String username, String password) {
+        this.id = UUID.randomUUID();
+        this.username = username;
+        this.password = password;
+    }
+
     public UUID getId() {
         return id;
     }
