@@ -20,14 +20,14 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public boolean login(String username, String password) throws UserNotFoundByNameException, LoginIncorrectException {
+    public boolean login(String username, String password) throws UserNotFoundByNameException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundByNameException(username));
         if (passwordEncoder.matches(password, user.getPassword())) {
             return true; // Connexion succeed
         }
-        else {  // Username or password incorrect
-            throw new LoginIncorrectException(username);
+        else {  // password incorrect
+            return false;
         }
     }
 

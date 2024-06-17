@@ -26,7 +26,6 @@ public class GlobalDefaultExceptionHandler {
     @ExceptionHandler({
             EventNameAlreadyExistsException.class,
             UserNameAlreadyExistsException.class,
-            LoginIncorrectException.class
     })
     public ResponseEntity<String> handleBadRequestException(Exception ex) {
         logger.warn("[BAD REQUEST] {}", ex.getMessage());
