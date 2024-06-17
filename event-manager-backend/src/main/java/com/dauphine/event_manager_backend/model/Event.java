@@ -22,7 +22,7 @@ public class Event {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "date", columnDefinition="DATE")
+    @Column(name = "date")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime date;
 
