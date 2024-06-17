@@ -23,23 +23,17 @@ public class AuthServiceImpl implements AuthService {
     public boolean login(String username, String password) throws UserNotFoundByNameException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundByNameException(username));
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return true; // Connexion succeed
-        }
-        else {  // password incorrect
-            return false;
-        }
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override
-    public boolean registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException {
+    public void registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException {
         if (userRepository.existsByUsername(username)) {
             throw new UserNameAlreadyExistsException(username);
         }
         String hashedPassword = passwordEncoder.encode(plainPassword);
         User user = new User(username, hashedPassword);
         userRepository.save(user);
-        return true;
     }
 
 
