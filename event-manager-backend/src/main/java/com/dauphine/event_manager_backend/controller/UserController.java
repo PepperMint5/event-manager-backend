@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) throws UserNotFoundByIdException {
         User user = userService.getUserById(id);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getPassword());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
@@ -34,7 +34,7 @@ public class UserController {
     @GetMapping("/username/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) throws UserNotFoundByNameException {
         User user = userService.getUserByUsername(username);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getPassword());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
     @PutMapping("/{id}/username")
     public ResponseEntity<UserResponse> updateUsername(@PathVariable UUID id, @RequestParam String newUsername) throws UserNotFoundByIdException {
         User user = userService.updateUsername(id, newUsername);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getPassword());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
@@ -50,7 +50,7 @@ public class UserController {
     @PutMapping("/{id}/password")
     public ResponseEntity<UserResponse> updatePassword(@PathVariable UUID id, @RequestParam String newPassword) throws UserNotFoundByIdException {
         User user = userService.updatePassword(id, newPassword);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getPassword());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 

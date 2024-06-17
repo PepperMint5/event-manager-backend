@@ -23,7 +23,7 @@ public interface EventService {
 
     Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException;
 
-    List<Event> getAllLikeUserId(UUID id);
+    List<Event> getAllLikeUserId(UUID id) throws UserNotFoundByIdException;
 
-    List<Event> getAllLikeCategoryId(UUID id);
+    List<Event> getAllLikeCategoryId(UUID id) throws CategoryNotFoundByIdException;
 }
