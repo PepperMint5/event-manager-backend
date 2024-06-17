@@ -30,6 +30,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             """)
     List<Event> getAllLikeCategoryId(UUID categoryId);
 
-    boolean existsByName(String name);
+    boolean existsByTitle(String title);
 }
 

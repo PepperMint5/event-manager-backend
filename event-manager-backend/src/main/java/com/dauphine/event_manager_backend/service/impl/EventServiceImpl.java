@@ -11,7 +11,6 @@ import com.dauphine.event_manager_backend.repository.CategoryRepository;
 import com.dauphine.event_manager_backend.repository.EventRepository;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.EventService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,7 +52,7 @@ public class EventServiceImpl implements EventService {
                     .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
-        if (eventRepository.existsByName(title)) {
+        if (eventRepository.existsByTitle(title)) {
             throw new EventNameAlreadyExistsException(title);
         }
         Event newEvent = new Event(title, city, address, date, description, category, user);
@@ -72,7 +71,7 @@ public class EventServiceImpl implements EventService {
     public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         Event event = getEventById(eventId);
-        if (eventRepository.existsByName(title) && !Objects.equals(event.getTitle(), title)) {
+        if (eventRepository.existsByTitle(title) && !Objects.equals(event.getTitle(), title)) {
             throw new EventNameAlreadyExistsException(title);
         }
         event.setTitle(title);

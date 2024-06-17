@@ -1,7 +1,5 @@
 package com.dauphine.event_manager_backend.service.impl;
 
-import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
-import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.User;
@@ -11,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
