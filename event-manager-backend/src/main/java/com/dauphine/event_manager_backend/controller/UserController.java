@@ -1,4 +1,6 @@
 package com.dauphine.event_manager_backend.controller;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,52 +24,33 @@ public class UserController {
     //TODO Retourner uniquement les username et id et pas les mdp
     @Operation(summary = "Get User by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) throws UserNotFoundByIdException {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     //TODO Retourner uniquement les username et id et pas les mdp
     @Operation(summary = "Get User by Username")
     @GetMapping("/username/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        User user = userService.getUserByUsername(username);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) throws UserNotFoundByNameException {
+        return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
     }
 
     @Operation(summary = "Update Username")
     @PutMapping("/{id}/username")
-    public ResponseEntity<User> updateUsername(@PathVariable UUID id, @RequestParam String newUsername) {
-        User updatedUser = userService.updateUsername(id, newUsername);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    public ResponseEntity<User> updateUsername(@PathVariable UUID id, @RequestParam String newUsername) throws UserNotFoundByIdException {
+        return new ResponseEntity<>(userService.updateUsername(id, newUsername), HttpStatus.OK);
     }
 
     @Operation(summary = "Update Password")
     @PutMapping("/{id}/password")
-    public ResponseEntity<User> updatePassword(@PathVariable UUID id, @RequestParam String newPassword) {
-        User updatedUser = userService.updatePassword(id, newPassword);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    public ResponseEntity<User> updatePassword(@PathVariable UUID id, @RequestParam String newPassword) throws UserNotFoundByIdException {
+        return new ResponseEntity<>(userService.updatePassword(id, newPassword), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete User by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) throws UserNotFoundByIdException {
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-/*    @Operation(summary = "Create New User")
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }*/
 }

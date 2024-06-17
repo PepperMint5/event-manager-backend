@@ -1,13 +1,12 @@
 package com.dauphine.event_manager_backend.service.impl;
 
+import com.dauphine.event_manager_backend.exceptions.*;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.AuthService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -21,24 +20,21 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public boolean login(String username, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return true; // Connexion succeed
-            }
+    public boolean login(String username, String password) throws UserNotFoundByNameException, LoginIncorrectException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundByNameException(username));
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return true; // Connexion succeed
         }
-        return false; // Username or password incorrect
-        //TODO ajouter une exception username already taken et incorret password (peut être dans une seule et même exception
+        else {  // Username or password incorrect
+            throw new LoginIncorrectException(username);
+        }
     }
 
     @Override
-    public boolean registerUser(String username, String plainPassword) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            return false;
-            //TODO ajouter une exception UsernameAlreadyExists
+    public boolean registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException {
+        if (userRepository.existsByUsername(username)) {
+            throw new UserNameAlreadyExistsException(username);
         }
         String hashedPassword = passwordEncoder.encode(plainPassword);
         User user = new User(username, hashedPassword);

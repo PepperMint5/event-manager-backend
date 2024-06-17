@@ -1,7 +1,9 @@
 package com.dauphine.event_manager_backend.controller;
 
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.service.EventService;
 import com.dauphine.event_manager_backend.dto.EventRequest;
@@ -50,7 +52,7 @@ public class EventController {
             summary = "Create event endpoint",
             description = "Create a new event based on {EventRequest} data. Returns the created event"
     )
-    public Event createEvent(@RequestBody EventRequest EventRequest){
+    public Event createEvent(@RequestBody EventRequest EventRequest) throws CategoryNotFoundByIdException, EventNameAlreadyExistsException, UserNotFoundByIdException {
         return eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
     }
 
@@ -61,7 +63,7 @@ public class EventController {
     )
     public ResponseEntity<Void> deleteEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
         eventService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
@@ -69,7 +71,7 @@ public class EventController {
             summary = "Update event by id endpoint",
             description = "Update event by {id}. Returns {id}"
     )
-    public ResponseEntity<Event> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
+    public ResponseEntity<Event> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
         Event updatedEvent = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
         return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
     }

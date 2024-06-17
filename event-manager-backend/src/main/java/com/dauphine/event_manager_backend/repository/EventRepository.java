@@ -29,5 +29,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             WHERE (event.category.id = :categoryId)
             """)
     List<Event> getAllLikeCategoryId(UUID categoryId);
+
+    boolean existsByName(String name);
 }
 
