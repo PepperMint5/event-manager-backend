@@ -19,6 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //TODO Retourner uniquement les username et id et pas les mdp
     @Operation(summary = "Get User by ID")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id) {
@@ -30,6 +31,7 @@ public class UserController {
         }
     }
 
+    //TODO Retourner uniquement les username et id et pas les mdp
     @Operation(summary = "Get User by Username")
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
