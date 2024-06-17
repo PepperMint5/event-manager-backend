@@ -1,5 +1,9 @@
 package com.dauphine.event_manager_backend.service.impl;
 
+import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
+import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.UserService;
@@ -23,26 +27,25 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User getUserById(UUID id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElse(null);
+    public User getUserById(UUID id) throws UserNotFoundByIdException {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundByIdException(id));
+
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        return userOptional.orElse(null);
+    public User getUserByUsername(String username) throws UserNotFoundByNameException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundByNameException(username));
     }
 
     @Override
-    public User updateUsername(UUID id, String newUsername) {
+    public User updateUsername(UUID id, String newUsername) throws UserNotFoundByIdException {
         User user = getUserById(id);
         user.setUsername(newUsername);
         return userRepository.save(user);
     }
 
     @Override
-    public User updatePassword(UUID id, String newPassword) {
+    public User updatePassword(UUID id, String newPassword) throws UserNotFoundByIdException {
         User user = getUserById(id);
         String hashedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(hashedPassword);
@@ -50,7 +53,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(UUID id) {
+    public void deleteUserById(UUID id) throws UserNotFoundByIdException {
+        if (userRepository.existsById(id)) {
+            throw new UserNotFoundByIdException(id);
+        }
         userRepository.deleteById(id);
     }
 

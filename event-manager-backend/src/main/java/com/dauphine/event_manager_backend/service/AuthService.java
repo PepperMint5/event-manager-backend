@@ -1,7 +1,12 @@
 package com.dauphine.event_manager_backend.service;
 
-public interface AuthService {
-    boolean login(String username, String password);
+import com.dauphine.event_manager_backend.exceptions.LoginIncorrectException;
+import com.dauphine.event_manager_backend.exceptions.UserNameAlreadyExistsException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 
-    boolean registerUser(String username, String plainPassword);
+public interface AuthService {
+    boolean login(String username, String password) throws UserNotFoundByNameException, LoginIncorrectException;
+
+    boolean registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException;
+
 }

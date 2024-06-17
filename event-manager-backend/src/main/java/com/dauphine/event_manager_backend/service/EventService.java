@@ -1,7 +1,9 @@
 package com.dauphine.event_manager_backend.service;
 
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
 
 import java.time.LocalDateTime;
@@ -15,11 +17,11 @@ public interface EventService {
 
     Event getEventById(UUID id) throws EventNotFoundByIdException;
 
-    Event create(String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId);
+    Event create(String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException;
 
     void deleteById(UUID id) throws EventNotFoundByIdException;
 
-    Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException;
+    Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException;
 
     List<Event> getAllLikeUserId(UUID id);
 
