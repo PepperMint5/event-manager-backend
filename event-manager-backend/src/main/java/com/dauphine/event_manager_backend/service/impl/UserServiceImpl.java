@@ -3,6 +3,8 @@ package com.dauphine.event_manager_backend.service.impl;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -40,7 +44,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updatePassword(UUID id, String newPassword) {
         User user = getUserById(id);
-        user.setPassword(newPassword);
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(hashedPassword);
         return userRepository.save(user);
     }
 
