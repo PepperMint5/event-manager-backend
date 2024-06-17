@@ -84,12 +84,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllLikeUserId(UUID id) {
+    public List<Event> getAllLikeUserId(UUID id) throws UserNotFoundByIdException {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundByIdException(id);
+        }
         return eventRepository.getAllLikeUserId(id);
     }
 
     @Override
-    public List<Event> getAllLikeCategoryId(UUID id) {
+    public List<Event> getAllLikeCategoryId(UUID id) throws CategoryNotFoundByIdException {
+        if (!categoryRepository.existsById(id)) {
+            throw new CategoryNotFoundByIdException(id);
+        }
         return eventRepository.getAllLikeCategoryId(id);
     }
 }

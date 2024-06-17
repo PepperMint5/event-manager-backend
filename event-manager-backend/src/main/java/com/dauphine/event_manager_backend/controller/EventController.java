@@ -78,13 +78,13 @@ public class EventController {
 
     @Operation(summary = "Get all Events by user ID")
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Event>> getEventsByUserId(@PathVariable UUID id) {
+    public ResponseEntity<List<Event>> getEventsByUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
         return new ResponseEntity<>(eventService.getAllLikeUserId(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all Events by category ID")
     @GetMapping("/category/{id}")
-    public ResponseEntity<List<Event>> getEventsByCategoryId(@PathVariable UUID id) {
+    public ResponseEntity<List<Event>> getEventsByCategoryId(@PathVariable UUID id) throws CategoryNotFoundByIdException {
         return new ResponseEntity<>(eventService.getAllLikeCategoryId(id), HttpStatus.OK);
     }
 }
