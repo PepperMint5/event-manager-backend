@@ -55,7 +55,8 @@ public class EventServiceImpl implements EventService {
         if (eventRepository.existsByTitle(title)) {
             throw new EventNameAlreadyExistsException(title);
         }
-        Event newEvent = new Event(title, city, address, date, description, category, user);
+        LocalDateTime last_updated = LocalDateTime.now();
+        Event newEvent = new Event(title, city, address, date, description, last_updated, category, user);
         return eventRepository.save(newEvent);
     }
 
@@ -68,7 +69,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
+    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         Event event = getEventById(eventId);
         if (eventRepository.existsByTitle(title) && !Objects.equals(event.getTitle(), title)) {
@@ -79,6 +80,7 @@ public class EventServiceImpl implements EventService {
         event.setAddress(address);
         event.setDate(date);
         event.setDescription(description);
+        event.setLastUpdated(LocalDateTime.now());
         event.setCategory(category);
         return eventRepository.save(event);
     }

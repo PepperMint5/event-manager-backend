@@ -23,11 +23,15 @@ public class Event {
     private String address;
 
     @Column(name = "date")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "last_updated")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime last_updated;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -35,7 +39,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private User user;
+    private User owner;
 
     public UUID getId() {
         return id;
@@ -85,6 +89,14 @@ public class Event {
         this.description = description;
     }
 
+    public LocalDateTime getLastUpdated() {
+        return last_updated;
+    }
+
+    public void setLastUpdated(LocalDateTime last_updated) {
+        this.last_updated = last_updated;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -93,23 +105,24 @@ public class Event {
         this.category = category;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public Event(String title, String city, String address, LocalDateTime date, String description, Category category, User user) {
+    public Event(String title, String city, String address, LocalDateTime date, String description, LocalDateTime last_updated, Category category, User owner) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.city = city;
         this.address = address;
         this.date = date;
         this.description = description;
+        this.last_updated = LocalDateTime.now();
         this.category = category;
-        this.user = user;
+        this.owner = owner;
     }
 
     public Event(){}
@@ -124,7 +137,7 @@ public class Event {
                 ", date=" + date +
                 ", description='" + description + '\'' +
                 ", category=" + category +
-                ", user=" + user +
+                ", owner=" + owner +
                 '}';
     }
 }
