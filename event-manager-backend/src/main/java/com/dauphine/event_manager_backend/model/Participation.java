@@ -2,8 +2,6 @@ package com.dauphine.event_manager_backend.model;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "participation")
 public class Participation {
@@ -20,6 +18,15 @@ public class Participation {
     @MapsId("eventId")
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
+
+    public Participation() {
+    }
+
+    public Participation(User user, Event event) {
+        this.id = new ParticipationId(user.getId(), event.getId());
+        this.user = user;
+        this.event = event;
+    }
 
     public ParticipationId getId() {
         return id;
@@ -45,9 +52,4 @@ public class Participation {
         this.event = event;
     }
 
-    public Participation(User user, Event event) {
-        this.id = new ParticipationId(user.getId(), event.getId());
-        this.user = user;
-        this.event = event;
-    }
 }

@@ -30,7 +30,7 @@ public class Event {
     private String description;
 
     @Column(name = "last_updated")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime last_updated;
 
     @ManyToOne
