@@ -1,9 +1,12 @@
 package com.dauphine.event_manager_backend.service;
 
+import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
+import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -18,4 +21,13 @@ public interface UserService {
     void deleteUserById(UUID id) throws UserNotFoundByIdException;
 
     User createUser(User user);
+
+    Boolean getIsParticipating(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
+
+    List<Event> getAllParticipations(UUID id) throws UserNotFoundByIdException;
+
+    //Void deleteParticipation(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
+
+    //List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
+
 }
