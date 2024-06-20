@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.dauphine.event_manager_backend.dto.EventResponse.ListEventResponse;
-import static com.dauphine.event_manager_backend.dto.UserResponse.ListUserResponse;
 
 @RestController
 @Tag(name = "User Controller",
@@ -77,9 +76,9 @@ public class UserController {
     }
 
     @Operation(summary = "Get if User is participating to an event")
-    @GetMapping("/{id}/event")
-    public ResponseEntity<Boolean> getIsParticipating(@PathVariable UUID id, @RequestParam UUID eventId) throws UserNotFoundByIdException, EventNotFoundByIdException {
-        return new ResponseEntity<>(userService.getIsParticipating(id, eventId), HttpStatus.OK);
+    @GetMapping("/{userId}/event")
+    public ResponseEntity<Boolean> getIsParticipating(@PathVariable UUID userId, @RequestParam UUID eventId) throws UserNotFoundByIdException, EventNotFoundByIdException {
+        return new ResponseEntity<>(userService.getIsParticipating(userId, eventId), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all user's participations")
@@ -90,9 +89,9 @@ public class UserController {
     }
 
     @Operation(summary = "Delete participation to an event")
-    @DeleteMapping("/{id}/event")
-    public ResponseEntity<Void> deleteParticipation(@PathVariable UUID id, @RequestParam UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-        userService.deleteParticipation(id, eventId);
+    @DeleteMapping("/{userId}/event")
+    public ResponseEntity<Void> deleteParticipation(@PathVariable UUID userId, @RequestParam UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        userService.deleteParticipation(userId, eventId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

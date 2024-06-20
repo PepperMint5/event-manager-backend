@@ -75,26 +75,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean getIsParticipating(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new UserNotFoundByIdException(user_id));
-        Event event = eventRepository.findById(event_id)
-                .orElseThrow(() -> new EventNotFoundByIdException(event_id));
+        if (!userRepository.existsById(user_id)) {
+            throw new UserNotFoundByIdException(user_id);
+        }
+        if (!eventRepository.existsById(event_id)) {
+            throw new EventNotFoundByIdException(event_id);
+        }
         return participationRepository.existsByUserIdAndEventId(user_id, event_id);
     }
 
     @Override
     public List<Event> getAllParticipations(UUID id) throws UserNotFoundByIdException {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundByIdException(id));
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundByIdException(id);
+        }
         return participationRepository.findAllEventsByUserId(id);
     }
 
     @Override
     public void deleteParticipation(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new UserNotFoundByIdException(user_id));
-        Event event = eventRepository.findById(event_id)
-                .orElseThrow(() -> new EventNotFoundByIdException(event_id));
+        if (!userRepository.existsById(user_id)) {
+            throw new UserNotFoundByIdException(user_id);
+        }
+        if (!eventRepository.existsById(event_id)) {
+            throw new EventNotFoundByIdException(event_id);
+        }
         participationRepository.deleteByUserIdAndEventId(user_id, event_id);
     }
 
