@@ -89,12 +89,12 @@ public class UserController {
         return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
 
-    // @Operation(summary = "Delete participation to an event")
-    // @DeleteMapping("/{id}/event")
-    // public ResponseEntity<Void> deleteParticipation(@PathVariable UUID id, @RequestParam UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-    //     userService.deleteParticipation(id, eventId);
-    //     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    // }
+    @Operation(summary = "Delete participation to an event")
+    @DeleteMapping("/{id}/event")
+    public ResponseEntity<Void> deleteParticipation(@PathVariable UUID id, @RequestParam UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        userService.deleteParticipation(id, eventId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     //@Operation(summary = "Get friends participating to same event")
     //@GetMapping("/{id}/event/friends")

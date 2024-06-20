@@ -4,6 +4,7 @@ import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.Participation;
 
 public class ParticipationResponse {
+
     private UserResponse userResponse;
     private Event event;
 
@@ -18,5 +19,13 @@ public class ParticipationResponse {
 
     public Event getEvent() {
         return event;
+    }
+
+    public void setUserResponse(UserResponse userResponse) {
+        this.userResponse = userResponse;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

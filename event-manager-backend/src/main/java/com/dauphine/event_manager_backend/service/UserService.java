@@ -26,7 +26,7 @@ public interface UserService {
 
     List<Event> getAllParticipations(UUID id) throws UserNotFoundByIdException;
 
-    //Void deleteParticipation(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
+    void deleteParticipation(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
 
     //List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
 
