@@ -19,7 +19,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             SELECT event
             FROM Event event
-            WHERE (event.user.id = :userId)
+            WHERE (event.owner.id = :userId)
             """)
     List<Event> getAllLikeUserId(UUID userId);
 
