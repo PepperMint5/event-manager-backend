@@ -114,13 +114,13 @@ public class EventController {
         return new ResponseEntity<>(nbParticipants, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/{userId}")
+    @PostMapping("/{eventId}/{userId}")
     @Operation(
             summary = "Create participation to event",
             description = "Create a new participation to an event for a user."
     )
-    public ResponseEntity<ParticipationResponse> createParticipation(@PathVariable UUID id, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-        Participation participation = eventService.createParticipation(id, userId);
+    public ResponseEntity<ParticipationResponse> createParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        Participation participation = eventService.createParticipation(eventId, userId);
         return new ResponseEntity<>(new ParticipationResponse(participation), HttpStatus.OK);
     }
 
