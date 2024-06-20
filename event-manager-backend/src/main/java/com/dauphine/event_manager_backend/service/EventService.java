@@ -19,7 +19,7 @@ public interface EventService {
 
     void deleteById(UUID id) throws EventNotFoundByIdException;
 
-    Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException;
+    Event update(UUID eventId, String title, String city, String address, LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException;
 
     List<Event> getAllLikeUserId(UUID id);
 

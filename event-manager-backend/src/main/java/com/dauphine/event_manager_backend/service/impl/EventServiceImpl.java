@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
+    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         Event event = getEventById(eventId);
         event.setTitle(title);

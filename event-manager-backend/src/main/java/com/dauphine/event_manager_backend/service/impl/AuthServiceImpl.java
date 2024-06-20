@@ -21,15 +21,15 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public boolean login(String username, String password) {
+    public User login(String username, String password) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return true; // Connexion succeed
+                return user; // Connexion succeed
             }
         }
-        return false; // Username or password incorrect
+        return null; // Username or password incorrect
         //TODO ajouter une exception username already taken et incorret password (peut être dans une seule et même exception
     }
 
