@@ -1,7 +1,9 @@
 package com.dauphine.event_manager_backend.service.impl;
 
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.User;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -45,49 +47,58 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event create(String title, String city, String address , LocalDateTime date, String description, UUID categoryId, UUID userId) {
-        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-        Optional<User> optionalUser =userRepository.findById(userId);
-        if (optionalCategory.isPresent() && optionalUser.isPresent()) {
-            Category category = optionalCategory.get();
-            User user = optionalUser.get();
-            Event newEvent = new Event(title, city, address, date, description, category, user);
-            return eventRepository.save(newEvent);
+    public Event create(String title, String city, String address , LocalDateTime date, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException {
+        Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundByIdException(userId));
+        if (eventRepository.existsByTitle(title)) {
+            throw new EventNameAlreadyExistsException(title);
         }
-        else if (optionalCategory.isEmpty()) {
-            throw new RuntimeException("Category with following id not found : " + categoryId);
-        }
-        else {
-            throw new RuntimeException("User with following id not found : " + userId);
-        }
+        LocalDateTime last_updated = LocalDateTime.now();
+        Event newEvent = new Event(title, city, address, date, description, last_updated, category, user);
+        return eventRepository.save(newEvent);
     }
 
     @Override
     public void deleteById(UUID id) throws EventNotFoundByIdException {
-        getEventById(id);
+        if (!eventRepository.existsById(id)) {
+            throw new EventNotFoundByIdException(id);
+        }
         eventRepository.deleteById(id);
     }
 
     @Override
-    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
+
+    public Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         Event event = getEventById(eventId);
+        if (eventRepository.existsByTitle(title) && !Objects.equals(event.getTitle(), title)) {
+            throw new EventNameAlreadyExistsException(title);
+        }
         event.setTitle(title);
         event.setCity(city);
         event.setAddress(address);
         event.setDate(date);
         event.setDescription(description);
+        event.setLastUpdated(LocalDateTime.now());
         event.setCategory(category);
         return eventRepository.save(event);
     }
 
     @Override
-    public List<Event> getAllLikeUserId(UUID id) {
+    public List<Event> getAllLikeUserId(UUID id) throws UserNotFoundByIdException {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundByIdException(id);
+        }
         return eventRepository.getAllLikeUserId(id);
     }
 
     @Override
-    public List<Event> getAllLikeCategoryId(UUID id) {
+    public List<Event> getAllLikeCategoryId(UUID id) throws CategoryNotFoundByIdException {
+        if (!categoryRepository.existsById(id)) {
+            throw new CategoryNotFoundByIdException(id);
+        }
         return eventRepository.getAllLikeCategoryId(id);
     }
 }

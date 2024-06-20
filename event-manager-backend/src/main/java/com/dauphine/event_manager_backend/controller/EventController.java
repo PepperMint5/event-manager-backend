@@ -1,7 +1,10 @@
 package com.dauphine.event_manager_backend.controller;
 
+import com.dauphine.event_manager_backend.dto.EventResponse;
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.service.EventService;
 import com.dauphine.event_manager_backend.dto.EventRequest;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.dauphine.event_manager_backend.dto.EventResponse.ListEventResponse;
 
 @RestController
 @Tag(
@@ -32,17 +37,18 @@ public class EventController {
             summary = "Get all events endpoint",
             description = "Return all events, or all with a name like {name}"
     )
-    public ResponseEntity<List<Event>> getAll(@RequestParam(required = false) String title)  {
+    public ResponseEntity<List<EventResponse>> getAll(@RequestParam(required = false) String title)  {
         List<Event> events = title == null | (title!=null && title.isBlank())
                 ? eventService.getAll()
                 : eventService.getAllLikeTitle(title);
-        return ResponseEntity.ok(events);
+        return ResponseEntity.ok(ListEventResponse(events));
     }
 
     @Operation(summary = "Get Event by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
-        return new ResponseEntity<>(eventService.getEventById(id), HttpStatus.OK);
+    public ResponseEntity<EventResponse> getEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
+        Event event = eventService.getEventById(id);
+        return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
     @PostMapping
@@ -50,8 +56,9 @@ public class EventController {
             summary = "Create event endpoint",
             description = "Create a new event based on {EventRequest} data. Returns the created event"
     )
-    public Event createEvent(@RequestBody EventRequest EventRequest){
-        return eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
+    public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest EventRequest) throws CategoryNotFoundByIdException, EventNameAlreadyExistsException, UserNotFoundByIdException {
+        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
+        return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -61,7 +68,7 @@ public class EventController {
     )
     public ResponseEntity<Void> deleteEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
         eventService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
@@ -69,20 +76,22 @@ public class EventController {
             summary = "Update event by id endpoint",
             description = "Update event by {id}. Returns {id}"
     )
-    public ResponseEntity<Event> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
-        Event updatedEvent = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId());
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    public ResponseEntity<EventResponse> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
+        Event event = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId());
+        return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all Events by user ID")
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Event>> getEventsByUserId(@PathVariable UUID id) {
-        return new ResponseEntity<>(eventService.getAllLikeUserId(id), HttpStatus.OK);
+    public ResponseEntity<List<EventResponse>> getEventsByUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
+        List<Event> events = eventService.getAllLikeUserId(id);
+        return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all Events by category ID")
     @GetMapping("/category/{id}")
-    public ResponseEntity<List<Event>> getEventsByCategoryId(@PathVariable UUID id) {
-        return new ResponseEntity<>(eventService.getAllLikeCategoryId(id), HttpStatus.OK);
+    public ResponseEntity<List<EventResponse>> getEventsByCategoryId(@PathVariable UUID id) throws CategoryNotFoundByIdException {
+        List<Event> events = eventService.getAllLikeCategoryId(id);
+        return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
 }
