@@ -1,6 +1,7 @@
 package com.dauphine.event_manager_backend.controller;
 
 import com.dauphine.event_manager_backend.dto.AuthRequest;
+import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,12 +31,11 @@ public class AuthController {
             description = "Logs in a user with username and password"
     )
     public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
-        boolean isAuthenticated = authService.login(authRequest.getUsername(), authRequest.getPassword());
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+        User user = authService.login(authRequest.getUsername(), authRequest.getPassword());
+        if (user != null) {
+            return ResponseEntity.ok().body("{\"userId\":\"" + user.getId() + "\"}");
         }
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
 
     @PostMapping("/register")

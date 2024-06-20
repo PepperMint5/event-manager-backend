@@ -70,7 +70,7 @@ public class EventController {
             description = "Update event by {id}. Returns {id}"
     )
     public ResponseEntity<Event> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException {
-        Event updatedEvent = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
+        Event updatedEvent = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId());
         return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
     }
 
