@@ -6,9 +6,11 @@ import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Participation;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.CategoryRepository;
 import com.dauphine.event_manager_backend.repository.EventRepository;
+import com.dauphine.event_manager_backend.repository.ParticipationRepository;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.EventService;
 import org.springframework.stereotype.Service;
@@ -24,11 +26,13 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final ParticipationRepository participationRepository;
 
-    public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
         this.eventRepository = eventRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.participationRepository = participationRepository;
     }
 
     @Override
@@ -101,4 +105,33 @@ public class EventServiceImpl implements EventService {
         }
         return eventRepository.getAllLikeCategoryId(id);
     }
+
+    @Override
+    public List<User> getAllUsersByEventId(UUID id) throws EventNotFoundByIdException {
+        if (!eventRepository.existsById(id)) {
+            throw new EventNotFoundByIdException(id);
+        }
+        return participationRepository.findAllUsersByEventId(id);
+    }
+
+    @Override
+    public int getNumberOfUsersByEventId(UUID id) throws EventNotFoundByIdException {
+        if (!eventRepository.existsById(id)) {
+            throw new EventNotFoundByIdException(id);
+        }
+        return participationRepository.countNumberOfUsersByEventId(id);
+    }
+
+    @Override
+    public Participation createParticipation(UUID event_id, UUID user_id) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        Event event = eventRepository.findById(event_id)
+                .orElseThrow(() -> new EventNotFoundByIdException(event_id));
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new UserNotFoundByIdException(user_id));
+        Participation participation = new Participation(user, event);
+        return participationRepository.save(participation);
+    }
+
+
+
 }

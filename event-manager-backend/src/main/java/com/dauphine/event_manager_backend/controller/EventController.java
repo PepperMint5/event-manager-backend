@@ -1,11 +1,15 @@
 package com.dauphine.event_manager_backend.controller;
 
 import com.dauphine.event_manager_backend.dto.EventResponse;
+import com.dauphine.event_manager_backend.dto.ParticipationResponse;
+import com.dauphine.event_manager_backend.dto.UserResponse;
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Participation;
+import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.EventService;
 import com.dauphine.event_manager_backend.dto.EventRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.dauphine.event_manager_backend.dto.EventResponse.ListEventResponse;
+import static com.dauphine.event_manager_backend.dto.UserResponse.ListUserResponse;
 
 @RestController
 @Tag(
@@ -94,4 +99,29 @@ public class EventController {
         List<Event> events = eventService.getAllLikeCategoryId(id);
         return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
+
+    @Operation(summary = "Get all participants")
+    @GetMapping("/{id}/participants")
+    public ResponseEntity<List<UserResponse>> getAllParticipants(@PathVariable UUID id) throws EventNotFoundByIdException {
+        List<User> users = eventService.getAllUsersByEventId(id);
+        return new ResponseEntity<>(ListUserResponse(users), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get number of participants")
+    @GetMapping("/{id}/count")
+    public ResponseEntity<Integer> getNumberOfParticipants(@PathVariable UUID id) throws EventNotFoundByIdException {
+        int nbParticipants = eventService.getNumberOfUsersByEventId(id);
+        return new ResponseEntity<>(nbParticipants, HttpStatus.OK);
+    }
+
+    @PostMapping("/{eventId}/{userId}")
+    @Operation(
+            summary = "Create participation to event",
+            description = "Create a new participation to an event for a user."
+    )
+    public ResponseEntity<ParticipationResponse> createParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        Participation participation = eventService.createParticipation(eventId, userId);
+        return new ResponseEntity<>(new ParticipationResponse(participation), HttpStatus.OK);
+    }
+
 }
