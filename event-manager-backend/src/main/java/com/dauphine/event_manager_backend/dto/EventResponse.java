@@ -1,5 +1,6 @@
 package com.dauphine.event_manager_backend.dto;
 
+import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class EventResponse {
     private LocalDateTime date;
     private String description;
     private LocalDateTime last_updated;
-    private UUID categoryId;
+    private Category category;
     private UserResponse ownerResponse;
 
     public EventResponse(Event event) {
@@ -26,7 +27,7 @@ public class EventResponse {
         this.date = event.getDate();
         this.description = event.getDescription();
         this.last_updated = event.getLastUpdated();
-        this.categoryId = event.getCategory().getId();
+        this.category = event.getCategory();
         this.ownerResponse = new UserResponse(event.getOwner());
     }
 
@@ -86,12 +87,12 @@ public class EventResponse {
         this.last_updated = last_updated;
     }
 
-    public UUID getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(UUID categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public UserResponse getOwnerResponse() {
