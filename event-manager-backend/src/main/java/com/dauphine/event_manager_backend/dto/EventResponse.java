@@ -17,7 +17,7 @@ public class EventResponse {
     private String description;
     private LocalDateTime last_updated;
     private Category category;
-    private UserResponse ownerResponse;
+    private UserResponse owner;
 
     public EventResponse(Event event) {
         this.id = event.getId();
@@ -28,7 +28,7 @@ public class EventResponse {
         this.description = event.getDescription();
         this.last_updated = event.getLastUpdated();
         this.category = event.getCategory();
-        this.ownerResponse = new UserResponse(event.getOwner());
+        this.owner = new UserResponse(event.getOwner());
     }
 
     public static List<EventResponse> ListEventResponse(List<Event> events) {
@@ -95,12 +95,12 @@ public class EventResponse {
         this.category = category;
     }
 
-    public UserResponse getOwnerResponse() {
-        return ownerResponse;
+    public UserResponse getOwner() {
+        return owner;
     }
 
-    public void setOwnerResponse(UserResponse ownerResponse) {
-        this.ownerResponse = ownerResponse;
+    public void setOwner(UserResponse owner) {
+        this.owner = owner;
     }
 
     public UUID getId() {
