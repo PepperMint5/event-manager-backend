@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class EventResponse {
+    private UUID id;
     private String title;
     private String city;
     private String address;
@@ -17,18 +18,8 @@ public class EventResponse {
     private UUID categoryId;
     private UserResponse ownerResponse;
 
-    public EventResponse(String title, String city, String address, LocalDateTime date, String description, LocalDateTime last_updated, UUID categoryId, UserResponse ownerResponse) {
-        this.title = title;
-        this.city = city;
-        this.address = address;
-        this.date = date;
-        this.description = description;
-        this.last_updated = last_updated;
-        this.categoryId = categoryId;
-        this.ownerResponse = ownerResponse;
-    }
-
     public EventResponse(Event event) {
+        this.id = event.getId();
         this.title = event.getTitle();
         this.city = event.getCity();
         this.address = event.getAddress();
@@ -109,5 +100,13 @@ public class EventResponse {
 
     public void setOwnerResponse(UserResponse ownerResponse) {
         this.ownerResponse = ownerResponse;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

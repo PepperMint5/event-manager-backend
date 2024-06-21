@@ -1,7 +1,10 @@
 package com.dauphine.event_manager_backend.dto;
 
+import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class UserResponse {
@@ -17,6 +20,14 @@ public class UserResponse {
     public UserResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
+    }
+
+    public static List<UserResponse> ListUserResponse(List<User> users) {
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User u: users) {
+            userResponses.add(new UserResponse(u));
+        }
+        return userResponses;
     }
 
     public UUID getId() {

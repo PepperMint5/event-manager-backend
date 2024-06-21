@@ -5,6 +5,8 @@ import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsExcep
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Participation;
+import com.dauphine.event_manager_backend.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,4 +28,10 @@ public interface EventService {
     List<Event> getAllLikeUserId(UUID id) throws UserNotFoundByIdException;
 
     List<Event> getAllLikeCategoryId(UUID id) throws CategoryNotFoundByIdException;
+
+    List<User> getAllUsersByEventId(UUID id) throws EventNotFoundByIdException;
+
+    int getNumberOfUsersByEventId(UUID id) throws EventNotFoundByIdException;
+
+    Participation createParticipation(UUID event_id, UUID user_id) throws EventNotFoundByIdException, UserNotFoundByIdException;
 }
