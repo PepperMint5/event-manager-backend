@@ -14,13 +14,11 @@ public class EventRequest {
     private String title;
     private String city;
     private String address;
-    //@Temporal(TemporalType.DATE)
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "pt-BR", timezone = "UTC")
     private Date date;
     private LocalTime time;
     private String description;
     private UUID category;
-    private UserResponse owner;
+    private UUID owner;
 
     public String getTitle() {
         return title;
@@ -48,7 +46,7 @@ public class EventRequest {
         return category;
     }
 
-    public UserResponse getOwner() {
+    public UUID getOwner() {
         return owner;
     }
 }
