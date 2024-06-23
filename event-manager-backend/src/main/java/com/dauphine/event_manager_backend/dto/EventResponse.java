@@ -3,7 +3,9 @@ package com.dauphine.event_manager_backend.dto;
 import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +15,8 @@ public class EventResponse {
     private String title;
     private String city;
     private String address;
-    private LocalDateTime date;
+    private Date date;
+    private LocalTime time;
     private String description;
     private LocalDateTime last_updated;
     private Category category;
@@ -25,6 +28,7 @@ public class EventResponse {
         this.city = event.getCity();
         this.address = event.getAddress();
         this.date = event.getDate();
+        this.time = event.getTime();
         this.description = event.getDescription();
         this.last_updated = event.getLastUpdated();
         this.category = event.getCategory();
@@ -63,12 +67,20 @@ public class EventResponse {
         this.address = address;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public String getDescription() {

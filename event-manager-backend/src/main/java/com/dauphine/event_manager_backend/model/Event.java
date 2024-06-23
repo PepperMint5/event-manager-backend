@@ -3,7 +3,9 @@ package com.dauphine.event_manager_backend.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -24,7 +26,11 @@ public class Event {
 
     @Column(name = "date")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime date;
+    private Date date;
+
+    @Column(name = "time")
+    @JsonFormat(pattern="HH:mm:ss")
+    private LocalTime time;
 
     @Column(name = "description")
     private String description;
@@ -41,13 +47,9 @@ public class Event {
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    public UUID getId() {
-        return id;
-    }
+    public UUID getId() { return id; }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public void setId(UUID id) { this.id = id; }
 
     public String getTitle() {
         return title;
@@ -73,11 +75,11 @@ public class Event {
         this.address = address;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -113,12 +115,23 @@ public class Event {
         this.owner = owner;
     }
 
-    public Event(String title, String city, String address, LocalDateTime date, String description, LocalDateTime last_updated, Category category, User owner) {
+
+    public LocalTime getTime() { return time; }
+
+    public void setTime(LocalTime time) { this.time = time; }
+
+    public LocalDateTime getLast_updated() { return last_updated; }
+
+    public void setLast_updated(LocalDateTime last_updated) { this.last_updated = last_updated; }
+
+
+    public Event(String title, String city, String address, Date date, LocalTime time, String description, LocalDateTime last_updated, Category category, User owner) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.city = city;
         this.address = address;
         this.date = date;
+        this.time = time;
         this.description = description;
         this.last_updated = LocalDateTime.now();
         this.category = category;
@@ -135,6 +148,7 @@ public class Event {
                 ", city='" + city + '\'' +
                 ", address='" + address + '\'' +
                 ", date=" + date +
+                ", time=" + time +
                 ", description='" + description + '\'' +
                 ", category=" + category +
                 ", owner=" + owner +
