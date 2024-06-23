@@ -34,13 +34,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException {
+    public User registerUser(String username, String plainPassword) throws UserNameAlreadyExistsException {
         if (userRepository.existsByUsername(username)) {
             throw new UserNameAlreadyExistsException(username);
         }
         String hashedPassword = passwordEncoder.encode(plainPassword);
         User user = new User(username, hashedPassword);
         userRepository.save(user);
+        return user;
     }
 
 

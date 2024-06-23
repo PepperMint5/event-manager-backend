@@ -46,8 +46,11 @@ public class AuthController {
             description = "Registers a new user with username and password"
     )
     public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) throws UserNameAlreadyExistsException {
-        authService.registerUser(authRequest.getUsername(), authRequest.getPassword());
-        return ResponseEntity.ok("Registration successful");
+        User user = authService.registerUser(authRequest.getUsername(), authRequest.getPassword());
+        if (user != null) {
+            return ResponseEntity.ok().body("{\"userId\":\"" + user.getId() + "\"}");
+        }
+        return ResponseEntity.status(401).body("Internal error");
     }
 
 }
