@@ -12,6 +12,8 @@ import java.util.UUID;
 public interface UserService {
     User getUserById(UUID id) throws UserNotFoundByIdException;
 
+    List<User> getUsersFriendsById(UUID id) ;
+
     User getUserByUsername(String username) throws UserNotFoundByNameException;
 
     User updateUsername(UUID id, String newUsername) throws UserNotFoundByIdException;
