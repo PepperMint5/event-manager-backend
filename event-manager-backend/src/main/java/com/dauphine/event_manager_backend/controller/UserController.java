@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,6 +59,18 @@ public class UserController {
         User user = userService.updatePassword(id, newPassword);
         UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get User's friends by ID")
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<List<UserResponse>> getUsersFriendsById(@PathVariable UUID id) {
+        List<User> users = userService.getUsersFriendsById(id);
+        List<UserResponse> userResponses = new ArrayList<>();
+        for(User user : users){
+            UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
+            userResponses.add(userResponse);
+        }
+        return new ResponseEntity<>(userResponses, HttpStatus.OK);
     }
 
     //@Operation(summary = "Create New User")

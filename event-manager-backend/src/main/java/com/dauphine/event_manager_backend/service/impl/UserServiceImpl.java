@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUsersFriendsById(UUID id){
+        return userRepository.findFriendsById(id);
+    }
+
+    @Override
     public User getUserByUsername(String username) throws UserNotFoundByNameException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundByNameException(username));
     }
