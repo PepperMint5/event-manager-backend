@@ -8,7 +8,8 @@ import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.Participation;
 import com.dauphine.event_manager_backend.model.User;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,11 +20,11 @@ public interface EventService {
 
     Event getEventById(UUID id) throws EventNotFoundByIdException;
 
-    Event create(String title, String city, String address ,LocalDateTime date, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException;
+    Event create(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException;
 
     void deleteById(UUID id) throws EventNotFoundByIdException;
 
-    Event update(UUID eventId, String title, String city, String address ,LocalDateTime date, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException;
+    Event update(UUID eventId, String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException;
 
     List<Event> getAllLikeUserId(UUID id) throws UserNotFoundByIdException;
 

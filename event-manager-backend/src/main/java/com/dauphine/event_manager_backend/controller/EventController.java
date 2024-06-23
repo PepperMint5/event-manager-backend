@@ -62,7 +62,7 @@ public class EventController {
             description = "Create a new event based on {EventRequest} data. Returns the created event"
     )
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest EventRequest) throws CategoryNotFoundByIdException, EventNameAlreadyExistsException, UserNotFoundByIdException {
-        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId(), EventRequest.getUserId());
+        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory(), EventRequest.getOwner().getId());
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class EventController {
             description = "Update event by {id}. Returns {id}"
     )
     public ResponseEntity<EventResponse> updateEventById(@PathVariable UUID id, @RequestBody EventRequest EventRequest) throws EventNotFoundByIdException, CategoryNotFoundByIdException, EventNameAlreadyExistsException {
-        Event event = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getDescription(), EventRequest.getCategoryId());
+        Event event = eventService.update(id, EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory());
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
