@@ -62,7 +62,7 @@ public class EventController {
             description = "Create a new event based on {EventRequest} data. Returns the created event"
     )
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest EventRequest) throws CategoryNotFoundByIdException, EventNameAlreadyExistsException, UserNotFoundByIdException {
-        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory(), EventRequest.getOwner().getId());
+        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory(), EventRequest.getOwner());
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
