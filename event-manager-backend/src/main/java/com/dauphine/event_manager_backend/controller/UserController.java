@@ -2,6 +2,7 @@ package com.dauphine.event_manager_backend.controller;
 import com.dauphine.event_manager_backend.dto.EventResponse;
 import com.dauphine.event_manager_backend.dto.UserResponse;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.FriendshipAlreadyExistException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.Event;
@@ -30,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @Operation(summary = "Get User by ID")
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) throws UserNotFoundByIdException {
         User user = userService.getUserById(id);
         UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
@@ -38,31 +39,24 @@ public class UserController {
     }
 
     @Operation(summary = "Get User by Username")
-    @GetMapping("/username/{username}")
+    @GetMapping("username/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) throws UserNotFoundByNameException {
         User user = userService.getUserByUsername(username);
         UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update Username")
-    @PutMapping("/{id}/username")
-    public ResponseEntity<UserResponse> updateUsername(@PathVariable UUID id, @RequestParam String newUsername) throws UserNotFoundByIdException {
-        User user = userService.updateUsername(id, newUsername);
+    @Operation(summary = "Update user's password")
+    @PutMapping("{id}")
+    public ResponseEntity<UserResponse> updatePassword(@PathVariable UUID id, @RequestBody String password) throws UserNotFoundByIdException {
+        User user = userService.updatePassword(id, password);
         UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update Password")
-    @PutMapping("/{id}/password")
-    public ResponseEntity<UserResponse> updatePassword(@PathVariable UUID id, @RequestParam String newPassword) throws UserNotFoundByIdException {
-        User user = userService.updatePassword(id, newPassword);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
-    }
 
     @Operation(summary = "Get User's friends by ID")
-    @GetMapping("/{id}/friends")
+    @GetMapping("{id}/friends")
     public ResponseEntity<List<UserResponse>> getUsersFriendsById(@PathVariable UUID id) {
         List<User> users = userService.getUsersFriendsById(id);
         List<UserResponse> userResponses = new ArrayList<>();
@@ -71,6 +65,29 @@ public class UserController {
             userResponses.add(userResponse);
         }
         return new ResponseEntity<>(userResponses, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Add a new friendship")
+    @PostMapping("{id1}/friends/{id2}")
+    public ResponseEntity<UserResponse> createFriendship(@PathVariable UUID id1, @PathVariable UUID id2) throws UserNotFoundByIdException, FriendshipAlreadyExistException {
+        User user = userService.getUserById(id2);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
+        userService.createFriendship(id1,id2);
+        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler(FriendshipAlreadyExistException.class)
+    public ResponseEntity<String> handleFriendshipAlreadyExistException(FriendshipAlreadyExistException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+
+
+    @Operation(summary = "Delete a friendship")
+    @DeleteMapping("{id1}/friends/{id2}")
+    public ResponseEntity<String> deleteFriendship(@PathVariable UUID id1, @PathVariable UUID id2) throws UserNotFoundByIdException {
+        userService.deleteFriendship(id1,id2);
+        return new ResponseEntity<>("Friendship deleted", HttpStatus.NO_CONTENT);
     }
 
     //@Operation(summary = "Create New User")
