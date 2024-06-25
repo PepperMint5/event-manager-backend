@@ -28,7 +28,9 @@ public class Friendship {
     public Friendship(User user1, User user2) {
         this.user1 = user1;
         this.user2 = user2;
+        this.id = new FriendshipId(user1.getId(), user2.getId());
     }
+
 
     public FriendshipId getId() {
         return id;

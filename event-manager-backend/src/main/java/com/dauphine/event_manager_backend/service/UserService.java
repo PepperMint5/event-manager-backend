@@ -1,6 +1,7 @@
 package com.dauphine.event_manager_backend.service;
 
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
+import com.dauphine.event_manager_backend.exceptions.FriendshipAlreadyExistException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.Event;
@@ -14,6 +15,9 @@ public interface UserService {
 
     List<User> getUsersFriendsById(UUID id) ;
 
+    void createFriendship(UUID id1, UUID id2) throws UserNotFoundByIdException, FriendshipAlreadyExistException;
+
+    void deleteFriendship(UUID id1, UUID id2) throws UserNotFoundByIdException;
     User getUserByUsername(String username) throws UserNotFoundByNameException;
 
     User updateUsername(UUID id, String newUsername) throws UserNotFoundByIdException;
