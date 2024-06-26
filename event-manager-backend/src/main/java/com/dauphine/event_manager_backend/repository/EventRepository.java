@@ -44,6 +44,16 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             """)
     List<Event> getAllUpcomingEvents();
 
+    @Query("""
+        SELECT DISTINCT e.city FROM Event e
+    """)
+    List<String> getAllCitiesWithEvents();
+
+    @Query("""
+        SELECT e FROM Event e WHERE e.city = :city
+    """)
+    List<Event> getAllEventsInCity(String city);
+
     boolean existsByTitle(String title);
 }
 

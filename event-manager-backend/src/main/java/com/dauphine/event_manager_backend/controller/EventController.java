@@ -138,4 +138,19 @@ public class EventController {
         return ResponseEntity.ok(ListEventResponse(events));
     }
 
+    @Operation(summary = "Get all cities that have events")
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> getAllCitiesWithEvents() {
+        List<String> cities = eventService.getAllCitiesWithEvents();
+        return ResponseEntity.ok(cities);
+    }
+
+
+    @Operation(summary = "Get all events in city")
+    @GetMapping("/cities/{city}")
+    public ResponseEntity<List<EventResponse>> getAllEventsInCity(@PathVariable String city) {
+        List<Event> events = eventService.getAllEventsInCity(city);
+        return ResponseEntity.ok(ListEventResponse(events));
+    }
+
 }
