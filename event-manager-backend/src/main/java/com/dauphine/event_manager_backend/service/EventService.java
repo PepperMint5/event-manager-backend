@@ -39,4 +39,8 @@ public interface EventService {
     List<Event> getAllPassedEvents();
 
     List<Event> getAllUpcomingEvents();
+
+    List<String> getAllCitiesWithEvents();
+
+    List<Event> getAllEventsInCity(String city);
 }
