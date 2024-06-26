@@ -35,4 +35,8 @@ public interface EventService {
     int getNumberOfUsersByEventId(UUID id) throws EventNotFoundByIdException;
 
     Participation createParticipation(UUID event_id, UUID user_id) throws EventNotFoundByIdException, UserNotFoundByIdException;
+
+    List<Event> getAllPassedEvents();
+
+    List<Event> getAllUpcomingEvents();
 }

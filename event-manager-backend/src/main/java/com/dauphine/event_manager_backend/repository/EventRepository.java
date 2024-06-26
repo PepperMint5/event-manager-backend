@@ -30,6 +30,20 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             """)
     List<Event> getAllLikeCategoryId(UUID categoryId);
 
+    @Query("""
+            SELECT event
+            FROM Event event
+            WHERE event.date < CURRENT_DATE
+            """)
+    List<Event> getAllPassedEvents();
+
+    @Query("""
+            SELECT event
+            FROM Event event
+            WHERE event.date > CURRENT_DATE
+            """)
+    List<Event> getAllUpcomingEvents();
+
     boolean existsByTitle(String title);
 }
 
