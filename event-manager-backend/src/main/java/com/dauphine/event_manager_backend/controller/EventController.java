@@ -114,14 +114,28 @@ public class EventController {
         return new ResponseEntity<>(nbParticipants, HttpStatus.OK);
     }
 
-    @PostMapping("/{eventId}/{userId}")
+    @GetMapping("/{eventId}/{userId}")
     @Operation(
             summary = "Create participation to event",
             description = "Create a new participation to an event for a user."
     )
-    public ResponseEntity<ParticipationResponse> createParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+    public ResponseEntity<Void> createParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
         Participation participation = eventService.createParticipation(eventId, userId);
-        return new ResponseEntity<>(new ParticipationResponse(participation), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Get all passed events")
+    @GetMapping("/past-events")
+    public ResponseEntity<List<EventResponse>> getAllPassedEvents() {
+        List<Event> events = eventService.getAllPassedEvents();
+        return ResponseEntity.ok(ListEventResponse(events));
+    }
+
+    @Operation(summary = "Get all upcoming events")
+    @GetMapping("/upcoming-events")
+    public ResponseEntity<List<EventResponse>> getAllUpcomingEvents() {
+        List<Event> events = eventService.getAllUpcomingEvents();
+        return ResponseEntity.ok(ListEventResponse(events));
     }
 
 }

@@ -134,6 +134,13 @@ public class EventServiceImpl implements EventService {
         return participationRepository.save(participation);
     }
 
-
+    @Override
+    public List<Event> getAllPassedEvents() {
+        return eventRepository.getAllPassedEvents();
+    }
+    @Override
+    public List<Event> getAllUpcomingEvents() {
+        return eventRepository.getAllUpcomingEvents();
+    }
 
 }
