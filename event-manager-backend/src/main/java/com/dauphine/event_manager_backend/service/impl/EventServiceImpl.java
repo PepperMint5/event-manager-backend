@@ -151,6 +151,29 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public boolean isParticipating(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+        if (!userRepository.existsById(userID)) {
+            throw new UserNotFoundByIdException(userID);
+        }
+        if (!eventRepository.existsById(eventId)) {
+            throw new EventNotFoundByIdException(eventId);
+        }
+        System.out.println("IsParticipating : " + participationRepository.existsByUserIdAndEventId(eventId,userID));
+        return participationRepository.existsByUserIdAndEventId(userID, eventId);
+    }
+
+    @Override
+    public void deleteParticpation(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+        if (!userRepository.existsById(userID)) {
+            throw new UserNotFoundByIdException(userID);
+        }
+        if (!eventRepository.existsById(eventId)) {
+            throw new EventNotFoundByIdException(eventId);
+        }
+        participationRepository.deleteByUserIdAndEventId(userID, eventId);
+    }
+
+    @Override
     public List<Review> getAllReviews(UUID id) {
         return reviewRepository.getByEventId(id);
     }

@@ -125,17 +125,6 @@ public class UserServiceImpl implements UserService {
         return participationRepository.findAllEventsByUserId(id);
     }
 
-    @Override
-    public void deleteParticipation(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
-        if (!userRepository.existsById(user_id)) {
-            throw new UserNotFoundByIdException(user_id);
-        }
-        if (!eventRepository.existsById(event_id)) {
-            throw new EventNotFoundByIdException(event_id);
-        }
-        participationRepository.deleteByUserIdAndEventId(user_id, event_id);
-    }
-
     // @Override
     // public List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
     //     User user = userRepository.findById(user_id)
