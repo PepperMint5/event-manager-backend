@@ -7,6 +7,7 @@ import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.Participation;
 import com.dauphine.event_manager_backend.model.User;
+import com.dauphine.event_manager_backend.model.Review;
 
 import java.sql.Date;
 import java.time.LocalTime;
@@ -20,7 +21,7 @@ public interface EventService {
 
     Event getEventById(UUID id) throws EventNotFoundByIdException;
 
-    Event create(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException;
+    Event createEvent(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException;
 
     void deleteById(UUID id) throws EventNotFoundByIdException;
 
@@ -43,4 +44,8 @@ public interface EventService {
     List<String> getAllCitiesWithEvents();
 
     List<Event> getAllEventsInCity(String city);
+
+    List<Review> getAllReviews(UUID id);
+
+    Review createReview(UUID event_id, UUID user_id, String comment, int grade) throws EventNotFoundByIdException, UserNotFoundByIdException;
 }

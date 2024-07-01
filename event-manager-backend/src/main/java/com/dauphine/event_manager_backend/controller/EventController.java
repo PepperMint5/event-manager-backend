@@ -1,17 +1,15 @@
 package com.dauphine.event_manager_backend.controller;
 
-import com.dauphine.event_manager_backend.dto.EventResponse;
-import com.dauphine.event_manager_backend.dto.ParticipationResponse;
-import com.dauphine.event_manager_backend.dto.UserResponse;
+import com.dauphine.event_manager_backend.dto.*;
 import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.Participation;
+import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.EventService;
-import com.dauphine.event_manager_backend.dto.EventRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -22,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.dauphine.event_manager_backend.dto.EventResponse.ListEventResponse;
+import static com.dauphine.event_manager_backend.dto.ReviewResponse.ListReviewResponse;
 import static com.dauphine.event_manager_backend.dto.UserResponse.ListUserResponse;
 
 @RestController
@@ -62,7 +61,7 @@ public class EventController {
             description = "Create a new event based on {EventRequest} data. Returns the created event"
     )
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest EventRequest) throws CategoryNotFoundByIdException, EventNameAlreadyExistsException, UserNotFoundByIdException {
-        Event event = eventService.create(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory(), EventRequest.getOwner());
+        Event event = eventService.createEvent(EventRequest.getTitle(), EventRequest.getCity(), EventRequest.getAddress(), EventRequest.getDate(), EventRequest.getTime(), EventRequest.getDescription(), EventRequest.getCategory(), EventRequest.getOwner());
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
@@ -145,7 +144,6 @@ public class EventController {
         return ResponseEntity.ok(cities);
     }
 
-
     @Operation(summary = "Get all events in city")
     @GetMapping("/cities/{city}")
     public ResponseEntity<List<EventResponse>> getAllEventsInCity(@PathVariable String city) {
@@ -153,4 +151,20 @@ public class EventController {
         return ResponseEntity.ok(ListEventResponse(events));
     }
 
+    @Operation(summary = "Get all reviews for event")
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<ReviewResponse>> getAllReviews(@PathVariable UUID id){
+        List<Review> reviews = eventService.getAllReviews(id);
+        return ResponseEntity.ok(ListReviewResponse(reviews));
+    }
+
+    @PostMapping("/{eventId}/reviews")
+    @Operation(
+            summary = "Create review for event",
+            description = "Create a new review for a past event for a user."
+    )
+    public ResponseEntity<ReviewResponse> createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        Review review = eventService.createReview(eventId, reviewRequest.getUserId(), reviewRequest.getComment(), reviewRequest.getGrade());
+        return new ResponseEntity<>(new ReviewResponse(review), HttpStatus.OK);
+    }
 }

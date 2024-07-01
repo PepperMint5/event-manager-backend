@@ -4,14 +4,8 @@ import com.dauphine.event_manager_backend.exceptions.CategoryNotFoundByIdExcepti
 import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
-import com.dauphine.event_manager_backend.model.Category;
-import com.dauphine.event_manager_backend.model.Event;
-import com.dauphine.event_manager_backend.model.Participation;
-import com.dauphine.event_manager_backend.model.User;
-import com.dauphine.event_manager_backend.repository.CategoryRepository;
-import com.dauphine.event_manager_backend.repository.EventRepository;
-import com.dauphine.event_manager_backend.repository.ParticipationRepository;
-import com.dauphine.event_manager_backend.repository.UserRepository;
+import com.dauphine.event_manager_backend.model.*;
+import com.dauphine.event_manager_backend.repository.*;
 import com.dauphine.event_manager_backend.service.EventService;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +23,14 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
+    private final ReviewRepository reviewRepository;
 
-    public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
+    public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository, UserRepository userRepository, ParticipationRepository participationRepository, ReviewRepository reviewRepository) {
         this.eventRepository = eventRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event create(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException {
+    public Event createEvent(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException {
         Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         User user = userRepository.findById(userId)
@@ -147,13 +143,26 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<String> getAllCitiesWithEvents() {
         return eventRepository.getAllCitiesWithEvents();
-    };
+    }
 
     @Override
     public List<Event> getAllEventsInCity(String city) {
         return eventRepository.getAllEventsInCity(city);
     }
 
+    @Override
+    public List<Review> getAllReviews(UUID id) {
+        return reviewRepository.getByEventId(id);
+    }
 
+    @Override
+    public  Review createReview(UUID event_id, UUID user_id, String comment, int grade) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        Event event = eventRepository.findById(event_id)
+                .orElseThrow(() -> new EventNotFoundByIdException(event_id));
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new UserNotFoundByIdException(user_id));
+        Review review = new Review(event, user, comment, grade);
+        return reviewRepository.save(review);
+    }
 
 }
