@@ -154,6 +154,28 @@ public class EventServiceImpl implements EventService {
         return eventRepository.getAllEventsInCity(city);
     }
 
+    @Override
+    public boolean isParticipating(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+        if (!userRepository.existsById(userID)) {
+            throw new UserNotFoundByIdException(userID);
+        }
+        if (!eventRepository.existsById(eventId)) {
+            throw new EventNotFoundByIdException(eventId);
+        }
+        return participationRepository.existsByUserIdAndEventId(eventId,userID);
+    }
+
+    @Override
+    public void deleteParticpation(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+        if (!userRepository.existsById(userID)) {
+            throw new UserNotFoundByIdException(userID);
+        }
+        if (!eventRepository.existsById(eventId)) {
+            throw new EventNotFoundByIdException(eventId);
+        }
+        participationRepository.deleteByUserIdAndEventId(userID, eventId);
+    }
+
 
 
 }

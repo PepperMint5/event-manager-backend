@@ -153,4 +153,21 @@ public class EventController {
         return ResponseEntity.ok(ListEventResponse(events));
     }
 
+    @Operation(summary = "Get the information if a user participate or not to an event given a userId and a participantId")
+    @GetMapping("/{eventId}/participations/{userId}")
+    public ResponseEntity<Boolean> isParticipating(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        boolean isParticipating = eventService.isParticipating(eventId,userId);
+        return ResponseEntity.ok(isParticipating);
+    }
+
+
+    @Operation(summary = "Delete a participation given a userId and a participantId")
+    @DeleteMapping("/{eventId}/participations/{userId}")
+    public ResponseEntity<String> deleteParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
+        eventService.deleteParticpation(eventId,userId);
+        return new ResponseEntity<>("Participation deleted", HttpStatus.NO_CONTENT);
+    }
+
+
+
 }
