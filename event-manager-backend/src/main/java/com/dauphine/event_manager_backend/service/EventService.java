@@ -43,4 +43,8 @@ public interface EventService {
     List<String> getAllCitiesWithEvents();
 
     List<Event> getAllEventsInCity(String city);
+
+    boolean isParticipating(UUID eventId, UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException;
+
+    void deleteParticpation(UUID eventId, UUID userId) throws UserNotFoundByIdException, EventNotFoundByIdException;
 }
