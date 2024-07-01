@@ -162,7 +162,8 @@ public class EventServiceImpl implements EventService {
         if (!eventRepository.existsById(eventId)) {
             throw new EventNotFoundByIdException(eventId);
         }
-        return participationRepository.existsByUserIdAndEventId(eventId,userID);
+        System.out.println("IsParticipating : " + participationRepository.existsByUserIdAndEventId(eventId,userID));
+        return participationRepository.existsByUserIdAndEventId(userID, eventId);
     }
 
     @Override
