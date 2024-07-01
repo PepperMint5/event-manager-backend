@@ -165,6 +165,7 @@ public class EventController {
         eventService.deleteParticpation(eventId,userId);
         return new ResponseEntity<>("Participation deleted", HttpStatus.NO_CONTENT);
     }
+
     @Operation(summary = "Get all reviews for event")
     @GetMapping("/{id}/reviews")
     public ResponseEntity<List<ReviewResponse>> getAllReviews(@PathVariable UUID id){
