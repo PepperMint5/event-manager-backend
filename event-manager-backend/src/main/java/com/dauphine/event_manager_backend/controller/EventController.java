@@ -114,7 +114,7 @@ public class EventController {
         return new ResponseEntity<>(nbParticipants, HttpStatus.OK);
     }
 
-    @GetMapping("/{eventId}/{userId}")
+    @PostMapping("/{eventId}/participations/{userId}")
     @Operation(
             summary = "Create participation to event",
             description = "Create a new participation to an event for a user."
