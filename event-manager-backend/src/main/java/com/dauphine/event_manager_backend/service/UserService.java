@@ -5,6 +5,7 @@ import com.dauphine.event_manager_backend.exceptions.FriendshipAlreadyExistExcep
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
 
 import java.util.List;
@@ -36,4 +37,5 @@ public interface UserService {
 
     //List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
 
+    List<Review> getAllReviewsByUser(UUID id) throws UserNotFoundByIdException;
 }

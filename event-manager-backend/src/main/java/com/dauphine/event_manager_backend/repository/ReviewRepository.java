@@ -20,4 +20,12 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     """
     )
     List<Review> getByEventId(UUID id);
+
+    @Query("""
+        SELECT r
+        FROM Review r
+        WHERE r.user.id = :id
+    """
+    )
+    List<Review> getEvenByUser(UUID id);
 }

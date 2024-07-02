@@ -10,30 +10,30 @@ import java.util.UUID;
 
 public class ReviewResponse {
     private UUID id;
-    private EventResponse eventId;
-    private UserResponse userId;
+    private EventResponse event;
+    private UserResponse user;
     private String comment;
     private int grade;
-    private Date date_review;
+    private Date date;
 
     public ReviewResponse() {}
 
     public ReviewResponse(Review review) {
         this.id = review.getId();
-        this.eventId = new EventResponse(review.getEvent());
-        this.userId = new UserResponse(review.getUser());
+        this.event = new EventResponse(review.getEvent());
+        this.user = new UserResponse(review.getUser());
         this.comment = review.getComment();
         this.grade = review.getGrade();
-        this.date_review = review.getDate_review();
+        this.date = review.getDate_review();
     }
 
     public ReviewResponse(UUID id, EventResponse eventId, UserResponse userId, String comment, int grade, Date date_review) {
         this.id = id;
-        this.eventId = eventId;
-        this.userId = userId;
+        this.event = eventId;
+        this.user = userId;
         this.comment = comment;
         this.grade = grade;
-        this.date_review = date_review;
+        this.date = date_review;
     }
 
     public static List<ReviewResponse> ListReviewResponse(List<Review> reviews) {
@@ -44,12 +44,12 @@ public class ReviewResponse {
         return reviewResponses;
     }
 
-    public EventResponse getEventId() {
-        return eventId;
+    public EventResponse getEvent() {
+        return event;
     }
 
-    public UserResponse getUserId() {
-        return userId;
+    public UserResponse getUser() {
+        return user;
     }
 
     public String getComment() {
@@ -64,7 +64,7 @@ public class ReviewResponse {
         return id;
     }
 
-    public Date getDate_review() {
-        return date_review;
+    public Date getDate() {
+        return date;
     }
 }

@@ -1,11 +1,13 @@
 package com.dauphine.event_manager_backend.controller;
 import com.dauphine.event_manager_backend.dto.EventResponse;
+import com.dauphine.event_manager_backend.dto.ReviewResponse;
 import com.dauphine.event_manager_backend.dto.UserResponse;
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.FriendshipAlreadyExistException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.dauphine.event_manager_backend.dto.EventResponse.ListEventResponse;
+import static com.dauphine.event_manager_backend.dto.ReviewResponse.ListReviewResponse;
 
 @RestController
 @Tag(name = "User Controller",
@@ -130,6 +133,13 @@ public class UserController {
     public ResponseEntity<List<UUID>> getEventsIdsByFriendsParticipations(@PathVariable UUID id) throws UserNotFoundByIdException {
         List<UUID> events = userService.getEventsByFriendsParticipations(id);
         return ResponseEntity.ok(events);
+    }
+
+    @Operation(summary = "Get all reviews written by user")
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<ReviewResponse>> getAllReviewsByUser(@PathVariable UUID id) throws UserNotFoundByIdException {
+        List<Review> reviews = userService.getAllReviewsByUser(id);
+        return ResponseEntity.ok(ListReviewResponse(reviews));
     }
 
 }
