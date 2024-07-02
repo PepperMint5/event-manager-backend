@@ -55,5 +55,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> getAllEventsInCity(String city);
 
     boolean existsByTitle(String title);
+
+    @Query("""
+        SELECT e FROM Event e WHERE e.id IN (SELECT p.event.id FROM Participation p WHERE p.user.id = : userId )
+    """)
+    List<Event> getAllEventsByUserIdParticipation(UUID userId);
 }
 

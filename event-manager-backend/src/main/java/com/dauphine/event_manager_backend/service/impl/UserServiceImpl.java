@@ -17,8 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -132,5 +131,19 @@ public class UserServiceImpl implements UserService {
     //     Event event = eventRepository.findById(event_id)
     //             .orElseThrow(() -> new EventNotFoundByIdException(event_id));
     // }
+
+    @Override
+    public List<UUID> getEventsByFriendsParticipations(UUID userId) throws UserNotFoundByIdException{
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundByIdException(userId);
+        }
+        List<User> friends = userRepository.findFriendsById(userId);
+        Set<UUID> eventIds = new HashSet<>();
+        for (User friend : friends) {
+            List<UUID> friendEventIds = participationRepository.findAllEventIdsByUserId(friend.getId());
+            eventIds.addAll(friendEventIds);
+        }
+        return new ArrayList<>(eventIds);
+    }
 
 }

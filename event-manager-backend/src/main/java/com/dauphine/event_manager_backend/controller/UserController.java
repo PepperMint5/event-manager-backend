@@ -125,5 +125,11 @@ public class UserController {
     //    return new ResponseEntity<>(ListUserResponse(users), HttpStatus.OK);
     //}
 
+    @Operation(summary = "Return the ids of all the vents one of the user (identified by userid) friend's is participating")
+    @GetMapping("/{id}/friends/participations/events/id")
+    public ResponseEntity<List<UUID>> getEventsIdsByFriendsParticipations(@PathVariable UUID id) throws UserNotFoundByIdException {
+        List<UUID> events = userService.getEventsByFriendsParticipations(id);
+        return ResponseEntity.ok(events);
+    }
 
 }
