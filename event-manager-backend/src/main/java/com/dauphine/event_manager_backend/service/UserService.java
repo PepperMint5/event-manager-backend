@@ -32,6 +32,7 @@ public interface UserService {
 
     List<Event> getAllParticipations(UUID id) throws UserNotFoundByIdException;
 
+    List<UUID> getEventsByFriendsParticipations(UUID userId) throws UserNotFoundByIdException;
 
     //List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException;
 

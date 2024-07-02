@@ -5,6 +5,10 @@ import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsExcep
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.*;
+import com.dauphine.event_manager_backend.model.Category;
+import com.dauphine.event_manager_backend.model.Event;
+import com.dauphine.event_manager_backend.model.Participation;
+import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.*;
 import com.dauphine.event_manager_backend.service.EventService;
 import org.springframework.stereotype.Service;
@@ -12,9 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -24,6 +26,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
     private final ReviewRepository reviewRepository;
+
 
     public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository, UserRepository userRepository, ParticipationRepository participationRepository, ReviewRepository reviewRepository) {
         this.eventRepository = eventRepository;

@@ -10,6 +10,8 @@ import com.dauphine.event_manager_backend.model.Participation;
 import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.EventService;
+import com.dauphine.event_manager_backend.dto.EventRequest;
+import com.dauphine.event_manager_backend.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -31,9 +33,11 @@ import static com.dauphine.event_manager_backend.dto.UserResponse.ListUserRespon
 @RequestMapping("/v1/events")
 public class EventController {
     private final EventService eventService;
+    private final UserServiceImpl userServiceImpl;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserServiceImpl userServiceImpl) {
         this.eventService = eventService;
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
@@ -173,6 +177,7 @@ public class EventController {
         return ResponseEntity.ok(ListReviewResponse(reviews));
     }
 
+
     @PostMapping("/{eventId}/reviews")
     @Operation(
             summary = "Create review for event",
@@ -183,3 +188,10 @@ public class EventController {
         return new ResponseEntity<>(new ReviewResponse(review), HttpStatus.OK);
     }
 }
+
+
+
+
+
+
+

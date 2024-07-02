@@ -52,4 +52,5 @@ public interface EventService {
     List<Review> getAllReviews(UUID id);
 
     Review createReview(UUID event_id, UUID user_id, String comment, int grade) throws EventNotFoundByIdException, UserNotFoundByIdException;
+
 }

@@ -51,4 +51,12 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
     void deleteByUserIdAndEventId(UUID userId, UUID eventId);
 
 
+    @Query("""
+    SELECT p.event.id FROM Participation p WHERE p.user.id = :userId
+    """)
+    List<UUID> findAllEventIdsByUserId(UUID userId);
+
+
+
+
 }
