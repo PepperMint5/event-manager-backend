@@ -33,11 +33,9 @@ import static com.dauphine.event_manager_backend.dto.UserResponse.ListUserRespon
 @RequestMapping("/v1/events")
 public class EventController {
     private final EventService eventService;
-    private final UserServiceImpl userServiceImpl;
 
-    public EventController(EventService eventService, UserServiceImpl userServiceImpl) {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
-        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
@@ -89,6 +87,8 @@ public class EventController {
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
+
+    //TODO on l'utilise celui là ??
     @Operation(summary = "Get all Events by user ID")
     @GetMapping("/user/{id}")
     public ResponseEntity<List<EventResponse>> getEventsByUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
@@ -187,6 +187,36 @@ public class EventController {
         Review review = eventService.createReview(eventId, reviewRequest.getUserId(), reviewRequest.getComment(), reviewRequest.getGrade());
         return new ResponseEntity<>(new ReviewResponse(review), HttpStatus.OK);
     }
+
+    @GetMapping("/owner/{id}")
+    @Operation(
+            summary = "Get all events owned by a user endpoint",
+            description = "Return all events with owner_id = to a given user_id"
+    )
+    public ResponseEntity<List<EventResponse>> getAllByOwnerUserId(@RequestParam UUID owner_id) throws UserNotFoundByIdException {
+        List<Event> events =  eventService.getAllEventsByOwnerId(owner_id);
+        return ResponseEntity.ok(ListEventResponse(events));
+    }
+
+
+    @Operation(summary = "Get all upcoming events a user participate to by userId")
+    @GetMapping("upcoming-events/participations/user/{id}")
+    public ResponseEntity<List<EventResponse>> getAllUpcomingEventFromUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
+        System.out.println("controller id : " + id);
+        List<Event> events =eventService.getAllUpcomingEventsByUserIdParticipation(id);
+        return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "Get all past events a user participate to by userId")
+    @GetMapping("past-events/participations/user/{id}")
+    public ResponseEntity<List<EventResponse>> getAllPastEventFromUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
+        List<Event> events =eventService.getAllPastEventsByUserIdParticipation(id);
+        return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
+    }
+
+
+
 }
 
 
