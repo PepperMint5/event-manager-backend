@@ -193,8 +193,8 @@ public class EventController {
             summary = "Get all events owned by a user endpoint",
             description = "Return all events with owner_id = to a given user_id"
     )
-    public ResponseEntity<List<EventResponse>> getAllByOwnerUserId(@RequestParam UUID owner_id) throws UserNotFoundByIdException {
-        List<Event> events =  eventService.getAllEventsByOwnerId(owner_id);
+    public ResponseEntity<List<EventResponse>> getAllByOwnerUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
+        List<Event> events =  eventService.getAllEventsByOwnerId(id);
         return ResponseEntity.ok(ListEventResponse(events));
     }
 
