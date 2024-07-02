@@ -57,8 +57,16 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     boolean existsByTitle(String title);
 
     @Query("""
-        SELECT e FROM Event e WHERE e.id IN (SELECT p.event.id FROM Participation p WHERE p.user.id = : userId )
+        SELECT e FROM Event e WHERE e.date >= CURRENT_DATE AND e.id IN (SELECT p.event.id FROM Participation p WHERE p.user.id = :id )
     """)
-    List<Event> getAllEventsByUserIdParticipation(UUID userId);
+    List<Event> getAllUpcomingEventsByUserIdParticipation(UUID id);
+
+
+    @Query("""
+        SELECT e FROM Event e WHERE e.date < CURRENT_DATE AND e.id IN (SELECT p.event.id FROM Participation p WHERE p.user.id = :id )
+    """)
+    List<Event> getAllPastEventsByUserIdParticipation(UUID id);
+
+    List<Event> findByOwnerId(UUID ownerId);
 }
 

@@ -191,4 +191,28 @@ public class EventServiceImpl implements EventService {
         return reviewRepository.save(review);
     }
 
+    @Override
+    public List<Event> getAllUpcomingEventsByUserIdParticipation(UUID userId) throws  UserNotFoundByIdException{
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundByIdException(userId));
+        System.out.println("getAllUpcomingEventsByUserIdParticipation, userId : " + userId);
+        return eventRepository.getAllUpcomingEventsByUserIdParticipation(userId);
+    }
+
+    @Override
+    public List<Event> getAllPastEventsByUserIdParticipation(UUID id) throws  UserNotFoundByIdException{
+        userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundByIdException(id));
+        return eventRepository.getAllPastEventsByUserIdParticipation(id);
+    }
+
+    @Override
+    public List<Event> getAllEventsByOwnerId(UUID ownerId) throws  UserNotFoundByIdException{
+        userRepository.findById(ownerId)
+                .orElseThrow(() -> new UserNotFoundByIdException(ownerId));
+        return eventRepository.findByOwnerId(ownerId);
+    }
+
+
+
 }
