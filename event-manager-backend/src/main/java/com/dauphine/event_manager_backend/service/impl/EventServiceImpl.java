@@ -86,7 +86,7 @@ public class EventServiceImpl implements EventService {
         event.setDate(date);
         event.setTime(time);
         event.setDescription(description);
-        event.setLastUpdated(LocalDateTime.now());
+        event.setLastUpdated(new Date(System.currentTimeMillis()));
         event.setCategory(category);
         return eventRepository.save(event);
     }

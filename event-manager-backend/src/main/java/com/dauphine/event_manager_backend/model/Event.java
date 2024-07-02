@@ -37,7 +37,7 @@ public class Event {
 
     @Column(name = "last_updated")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime last_updated;
+    private Date last_updated;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -91,11 +91,11 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getLastUpdated() {
+    public Date getLastUpdated() {
         return last_updated;
     }
 
-    public void setLastUpdated(LocalDateTime last_updated) {
+    public void setLastUpdated(Date last_updated) {
         this.last_updated = last_updated;
     }
 
@@ -120,9 +120,9 @@ public class Event {
 
     public void setTime(LocalTime time) { this.time = time; }
 
-    public LocalDateTime getLast_updated() { return last_updated; }
+    public Date getLast_updated() { return last_updated; }
 
-    public void setLast_updated(LocalDateTime last_updated) { this.last_updated = last_updated; }
+    public void setLast_updated(Date last_updated) { this.last_updated = last_updated; }
 
 
     public Event(String title, String city, String address, Date date, LocalTime time, String description, LocalDateTime last_updated, Category category, User owner) {
@@ -133,7 +133,7 @@ public class Event {
         this.date = date;
         this.time = time;
         this.description = description;
-        this.last_updated = LocalDateTime.now();
+        this.last_updated = new Date(System.currentTimeMillis());
         this.category = category;
         this.owner = owner;
     }

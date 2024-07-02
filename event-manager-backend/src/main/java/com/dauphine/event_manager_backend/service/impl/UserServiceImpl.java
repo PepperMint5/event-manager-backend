@@ -6,11 +6,9 @@ import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
 import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.Friendship;
+import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
-import com.dauphine.event_manager_backend.repository.EventRepository;
-import com.dauphine.event_manager_backend.repository.FriendshipRepository;
-import com.dauphine.event_manager_backend.repository.ParticipationRepository;
-import com.dauphine.event_manager_backend.repository.UserRepository;
+import com.dauphine.event_manager_backend.repository.*;
 import com.dauphine.event_manager_backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,17 +23,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
     private final EventRepository eventRepository;
-
     private final FriendshipRepository friendshipRepository;
-
+    private final ReviewRepository reviewRepository;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(UserRepository userRepository, ParticipationRepository participationRepository, EventRepository eventRepository, FriendshipRepository friendshipRepository) {
+    public UserServiceImpl(UserRepository userRepository, ParticipationRepository participationRepository, EventRepository eventRepository, FriendshipRepository friendshipRepository, ReviewRepository reviewRepository) {
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
         this.eventRepository = eventRepository;
         this.friendshipRepository = friendshipRepository;
+        this.reviewRepository = reviewRepository;
     }
 
 
@@ -144,6 +142,14 @@ public class UserServiceImpl implements UserService {
             eventIds.addAll(friendEventIds);
         }
         return new ArrayList<>(eventIds);
+    }
+
+    @Override
+    public List<Review> getAllReviewsByUser(UUID id) throws UserNotFoundByIdException {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundByIdException(id);
+        }
+        return reviewRepository.getEvenByUser(id);
     }
 
 }

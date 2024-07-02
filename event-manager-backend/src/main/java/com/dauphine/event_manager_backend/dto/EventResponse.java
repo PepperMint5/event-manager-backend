@@ -4,7 +4,6 @@ import com.dauphine.event_manager_backend.model.Category;
 import com.dauphine.event_manager_backend.model.Event;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class EventResponse {
     private Date date;
     private LocalTime time;
     private String description;
-    private LocalDateTime last_updated;
+    private Date last_updated;
     private Category category;
     private UserResponse owner;
 
@@ -91,11 +90,11 @@ public class EventResponse {
         this.description = description;
     }
 
-    public LocalDateTime getLast_updated() {
+    public Date getLast_updated() {
         return last_updated;
     }
 
-    public void setLast_updated(LocalDateTime last_updated) {
+    public void setLast_updated(Date last_updated) {
         this.last_updated = last_updated;
     }
 

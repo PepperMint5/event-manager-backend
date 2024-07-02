@@ -177,7 +177,6 @@ public class EventController {
         return ResponseEntity.ok(ListReviewResponse(reviews));
     }
 
-
     @PostMapping("/{eventId}/reviews")
     @Operation(
             summary = "Create review for event",
