@@ -16,7 +16,8 @@ public class ReviewResponse {
     private int grade;
     private Date date;
 
-    public ReviewResponse() {}
+    public ReviewResponse() {
+    }
 
     public ReviewResponse(Review review) {
         this.id = review.getId();
@@ -38,7 +39,7 @@ public class ReviewResponse {
 
     public static List<ReviewResponse> ListReviewResponse(List<Review> reviews) {
         List<ReviewResponse> reviewResponses = new ArrayList<>();
-        for (Review r: reviews) {
+        for (Review r : reviews) {
             reviewResponses.add(new ReviewResponse(r));
         }
         return reviewResponses;

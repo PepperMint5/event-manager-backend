@@ -1,4 +1,5 @@
 package com.dauphine.event_manager_backend.controller;
+
 import com.dauphine.event_manager_backend.dto.EventResponse;
 import com.dauphine.event_manager_backend.dto.ReviewResponse;
 import com.dauphine.event_manager_backend.dto.UserResponse;
@@ -63,7 +64,7 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> getUsersFriendsById(@PathVariable UUID id) {
         List<User> users = userService.getUsersFriendsById(id);
         List<UserResponse> userResponses = new ArrayList<>();
-        for(User user : users){
+        for (User user : users) {
             UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
             userResponses.add(userResponse);
         }
@@ -75,7 +76,7 @@ public class UserController {
     public ResponseEntity<UserResponse> createFriendship(@PathVariable UUID id1, @PathVariable UUID id2) throws UserNotFoundByIdException, FriendshipAlreadyExistException {
         User user = userService.getUserById(id2);
         UserResponse userResponse = new UserResponse(user.getId(), user.getUsername());
-        userService.createFriendship(id1,id2);
+        userService.createFriendship(id1, id2);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 
@@ -85,21 +86,12 @@ public class UserController {
     }
 
 
-
     @Operation(summary = "Delete a friendship")
     @DeleteMapping("{id1}/friends/{id2}")
     public ResponseEntity<String> deleteFriendship(@PathVariable UUID id1, @PathVariable UUID id2) throws UserNotFoundByIdException {
-        userService.deleteFriendship(id1,id2);
+        userService.deleteFriendship(id1, id2);
         return new ResponseEntity<>("Friendship deleted", HttpStatus.NO_CONTENT);
     }
-
-    //@Operation(summary = "Create New User")
-    //@PostMapping
-    //public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
-    //    User createdUser = userService.createUser(user);
-    //    UserResponse userResponse = new UserResponse(createdUser);
-    //    return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
-    //}
 
     @Operation(summary = "Delete User by ID")
     @DeleteMapping("/{id}")
@@ -120,13 +112,6 @@ public class UserController {
         List<Event> events = userService.getAllParticipations(id);
         return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
-
-    //@Operation(summary = "Get friends participating to same event")
-    //@GetMapping("/{id}/event/friends")
-    //public ResponseEntity<List<UserResponse>> getParticipatingFriends(@PathVariable UUID id, @RequestParam UUID eventId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-    //    List<User> users = userService.getParticipatingFriends(id, eventId);
-    //    return new ResponseEntity<>(ListUserResponse(users), HttpStatus.OK);
-    //}
 
     @Operation(summary = "Return the ids of all the vents one of the user (identified by userid) friend's is participating")
     @GetMapping("/{id}/friends/participations/events/id")

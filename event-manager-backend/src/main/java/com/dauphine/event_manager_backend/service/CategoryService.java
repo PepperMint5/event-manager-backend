@@ -7,8 +7,18 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryService {
+    /**
+     *
+     * @return
+     */
     List<Category> getAll();
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws CategoryNotFoundByIdException
+     */
     Category getById(UUID id) throws CategoryNotFoundByIdException;
 
 }

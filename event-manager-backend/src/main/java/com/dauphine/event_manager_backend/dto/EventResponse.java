@@ -36,7 +36,7 @@ public class EventResponse {
 
     public static List<EventResponse> ListEventResponse(List<Event> events) {
         List<EventResponse> eventResponses = new ArrayList<>();
-        for (Event e: events) {
+        for (Event e : events) {
             eventResponses.add(new EventResponse(e));
         }
         return eventResponses;

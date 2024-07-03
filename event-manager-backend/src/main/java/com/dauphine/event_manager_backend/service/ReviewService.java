@@ -8,11 +8,31 @@ import java.util.UUID;
 public interface ReviewService {
 
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     List<Review> getUserReviews(UUID userId);
 
+    /**
+     *
+     * @param reviewId
+     */
     void deleteReview(UUID reviewId);
 
+    /**
+     *
+     * @param review
+     * @return
+     */
     Review createReview(Review review);
 
+    /**
+     *
+     * @param reviewId
+     * @param reviewDetails
+     * @return
+     */
     Review updateReview(UUID reviewId, Review reviewDetails);
 }

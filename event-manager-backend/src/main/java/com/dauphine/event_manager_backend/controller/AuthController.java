@@ -1,9 +1,9 @@
 package com.dauphine.event_manager_backend.controller;
 
 import com.dauphine.event_manager_backend.dto.AuthRequest;
-import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.exceptions.UserNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByNameException;
+import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +32,7 @@ public class AuthController {
             summary = "Login user",
             description = "Logs in a user with username and password"
     )
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) throws UserNotFoundByNameException  {
+    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) throws UserNotFoundByNameException {
         User user = authService.login(authRequest.getUsername(), authRequest.getPassword());
         if (user != null) {
             return ResponseEntity.ok().body("{\"userId\":\"" + user.getId() + "\"}");

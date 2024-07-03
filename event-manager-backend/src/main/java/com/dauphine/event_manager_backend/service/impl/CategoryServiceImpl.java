@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getById(UUID id)throws CategoryNotFoundByIdException {
+    public Category getById(UUID id) throws CategoryNotFoundByIdException {
         return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundByIdException(id));
     }
 }
