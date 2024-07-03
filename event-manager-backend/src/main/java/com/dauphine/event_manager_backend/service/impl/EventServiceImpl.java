@@ -5,10 +5,6 @@ import com.dauphine.event_manager_backend.exceptions.EventNameAlreadyExistsExcep
 import com.dauphine.event_manager_backend.exceptions.EventNotFoundByIdException;
 import com.dauphine.event_manager_backend.exceptions.UserNotFoundByIdException;
 import com.dauphine.event_manager_backend.model.*;
-import com.dauphine.event_manager_backend.model.Category;
-import com.dauphine.event_manager_backend.model.Event;
-import com.dauphine.event_manager_backend.model.Participation;
-import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.*;
 import com.dauphine.event_manager_backend.service.EventService;
 import org.springframework.stereotype.Service;
@@ -16,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -37,7 +35,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAll(){
+    public List<Event> getAll() {
         return eventRepository.findAll();
     }
 
@@ -52,9 +50,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(String title, String city, String address , Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException {
+    public Event createEvent(String title, String city, String address, Date date, LocalTime time, String description, UUID categoryId, UUID userId) throws CategoryNotFoundByIdException, UserNotFoundByIdException, EventNameAlreadyExistsException {
         Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
+                .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
         if (eventRepository.existsByTitle(title)) {
@@ -154,19 +152,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean isParticipating(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+    public boolean isParticipating(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException {
         if (!userRepository.existsById(userID)) {
             throw new UserNotFoundByIdException(userID);
         }
         if (!eventRepository.existsById(eventId)) {
             throw new EventNotFoundByIdException(eventId);
         }
-        System.out.println("IsParticipating : " + participationRepository.existsByUserIdAndEventId(eventId,userID));
+        System.out.println("IsParticipating : " + participationRepository.existsByUserIdAndEventId(eventId, userID));
         return participationRepository.existsByUserIdAndEventId(userID, eventId);
     }
 
     @Override
-    public void deleteParticpation(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException{
+    public void deleteParticpation(UUID eventId, UUID userID) throws EventNotFoundByIdException, UserNotFoundByIdException {
         if (!userRepository.existsById(userID)) {
             throw new UserNotFoundByIdException(userID);
         }
@@ -182,7 +180,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public  Review createReview(UUID event_id, UUID user_id, String comment, int grade) throws EventNotFoundByIdException, UserNotFoundByIdException {
+    public Review createReview(UUID event_id, UUID user_id, String comment, int grade) throws EventNotFoundByIdException, UserNotFoundByIdException {
         Event event = eventRepository.findById(event_id)
                 .orElseThrow(() -> new EventNotFoundByIdException(event_id));
         User user = userRepository.findById(user_id)
@@ -192,7 +190,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllUpcomingEventsByUserIdParticipation(UUID userId) throws  UserNotFoundByIdException{
+    public List<Event> getAllUpcomingEventsByUserIdParticipation(UUID userId) throws UserNotFoundByIdException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
         System.out.println("getAllUpcomingEventsByUserIdParticipation, userId : " + userId);
@@ -200,19 +198,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllPastEventsByUserIdParticipation(UUID id) throws  UserNotFoundByIdException{
+    public List<Event> getAllPastEventsByUserIdParticipation(UUID id) throws UserNotFoundByIdException {
         userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundByIdException(id));
         return eventRepository.getAllPastEventsByUserIdParticipation(id);
     }
 
     @Override
-    public List<Event> getAllEventsByOwnerId(UUID ownerId) throws  UserNotFoundByIdException{
+    public List<Event> getAllEventsByOwnerId(UUID ownerId) throws UserNotFoundByIdException {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new UserNotFoundByIdException(ownerId));
         return eventRepository.findByOwnerId(ownerId);
     }
-
 
 
 }

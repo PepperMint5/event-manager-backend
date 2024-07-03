@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersFriendsById(UUID id){
+    public List<User> getUsersFriendsById(UUID id) {
         return userRepository.findFriendsById(id);
     }
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteFriendship(UUID id1, UUID id2) throws UserNotFoundByIdException{
+    public void deleteFriendship(UUID id1, UUID id2) throws UserNotFoundByIdException {
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundByIdException(id1));
         User user2 = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundByIdException(id2));
         Friendship friendship1 = new Friendship(user1, user2);
@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         friendshipRepository.delete(friendship1);
         friendshipRepository.delete(friendship2);
     }
+
     @Override
     public User getUserByUsername(String username) throws UserNotFoundByNameException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundByNameException(username));
@@ -122,16 +123,9 @@ public class UserServiceImpl implements UserService {
         return participationRepository.findAllEventsByUserId(id);
     }
 
-    // @Override
-    // public List<User> getParticipatingFriends(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
-    //     User user = userRepository.findById(user_id)
-    //             .orElseThrow(() -> new UserNotFoundByIdException(user_id));
-    //     Event event = eventRepository.findById(event_id)
-    //             .orElseThrow(() -> new EventNotFoundByIdException(event_id));
-    // }
 
     @Override
-    public List<UUID> getEventsByFriendsParticipations(UUID userId) throws UserNotFoundByIdException{
+    public List<UUID> getEventsByFriendsParticipations(UUID userId) throws UserNotFoundByIdException {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundByIdException(userId);
         }

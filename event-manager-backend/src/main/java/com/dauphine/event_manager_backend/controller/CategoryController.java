@@ -33,7 +33,7 @@ public class CategoryController {
             summary = "Get all categories endpoint",
             description = "Return all categories"
     )
-    public ResponseEntity<List<Category>> getAll()  {
+    public ResponseEntity<List<Category>> getAll() {
         List<Category> categories = categoryService.getAll();
         return ResponseEntity.ok(categories);
     }

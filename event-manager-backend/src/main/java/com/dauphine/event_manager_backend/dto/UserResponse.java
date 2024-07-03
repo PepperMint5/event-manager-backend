@@ -1,6 +1,5 @@
 package com.dauphine.event_manager_backend.dto;
 
-import com.dauphine.event_manager_backend.model.Event;
 import com.dauphine.event_manager_backend.model.User;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class UserResponse {
 
     public static List<UserResponse> ListUserResponse(List<User> users) {
         List<UserResponse> userResponses = new ArrayList<>();
-        for (User u: users) {
+        for (User u : users) {
             userResponses.add(new UserResponse(u));
         }
         return userResponses;

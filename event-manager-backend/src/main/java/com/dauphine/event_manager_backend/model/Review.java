@@ -1,8 +1,7 @@
 package com.dauphine.event_manager_backend.model;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-
-import com.dauphine.event_manager_backend.model.Event;
 
 import java.sql.Date;
 import java.util.UUID;

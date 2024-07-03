@@ -1,6 +1,6 @@
 package com.dauphine.event_manager_backend.service.impl;
 
-import com.dauphine.event_manager_backend.exceptions.*;
+import com.dauphine.event_manager_backend.exceptions.UserNameAlreadyExistsException;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.repository.UserRepository;
 import com.dauphine.event_manager_backend.service.AuthService;
@@ -22,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public User login(String username, String password)  throws UserNotFoundByNameException  {
+    public User login(String username, String password) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

@@ -19,18 +19,19 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    public Category(UUID id, String name){
+    public Category(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Category(){}
+    public Category() {
+    }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public UUID getId(){
+    public UUID getId() {
         return id;
     }
 

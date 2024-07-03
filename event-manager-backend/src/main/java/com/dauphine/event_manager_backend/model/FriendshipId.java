@@ -9,7 +9,8 @@ public class FriendshipId implements Serializable {
     private UUID userId1;
     private UUID userId2;
 
-    public  FriendshipId(){}
+    public FriendshipId() {
+    }
 
     public FriendshipId(UUID userId1, UUID userId2) {
         this.userId1 = userId1;

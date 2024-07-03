@@ -10,8 +10,6 @@ import com.dauphine.event_manager_backend.model.Participation;
 import com.dauphine.event_manager_backend.model.Review;
 import com.dauphine.event_manager_backend.model.User;
 import com.dauphine.event_manager_backend.service.EventService;
-import com.dauphine.event_manager_backend.dto.EventRequest;
-import com.dauphine.event_manager_backend.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -43,8 +41,8 @@ public class EventController {
             summary = "Get all events endpoint",
             description = "Return all events, or all with a name like {name}"
     )
-    public ResponseEntity<List<EventResponse>> getAll(@RequestParam(required = false) String title)  {
-        List<Event> events = title == null | (title!=null && title.isBlank())
+    public ResponseEntity<List<EventResponse>> getAll(@RequestParam(required = false) String title) {
+        List<Event> events = title == null | (title != null && title.isBlank())
                 ? eventService.getAll()
                 : eventService.getAllLikeTitle(title);
         return ResponseEntity.ok(ListEventResponse(events));
@@ -67,14 +65,14 @@ public class EventController {
         return new ResponseEntity<>(new EventResponse(event), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete event by id endpoint",
             description = "Delete event by {id}. Returns {id}"
     )
-    public ResponseEntity<Void> deleteEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
+    public ResponseEntity<String> deleteEventById(@PathVariable UUID id) throws EventNotFoundByIdException {
         eventService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Event deleted", HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
@@ -157,7 +155,7 @@ public class EventController {
     @Operation(summary = "Get the information if a user participate or not to an event given a userId and a participantId")
     @GetMapping("/{eventId}/participations/{userId}")
     public ResponseEntity<Boolean> isParticipating(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-        boolean isParticipating = eventService.isParticipating(eventId,userId);
+        boolean isParticipating = eventService.isParticipating(eventId, userId);
         return ResponseEntity.ok(isParticipating);
     }
 
@@ -165,13 +163,13 @@ public class EventController {
     @Operation(summary = "Delete a participation given a userId and a participantId")
     @DeleteMapping("/{eventId}/participations/{userId}")
     public ResponseEntity<String> deleteParticipation(@PathVariable UUID eventId, @PathVariable UUID userId) throws EventNotFoundByIdException, UserNotFoundByIdException {
-        eventService.deleteParticpation(eventId,userId);
+        eventService.deleteParticpation(eventId, userId);
         return new ResponseEntity<>("Participation deleted", HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "Get all reviews for event")
     @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<ReviewResponse>> getAllReviews(@PathVariable UUID id){
+    public ResponseEntity<List<ReviewResponse>> getAllReviews(@PathVariable UUID id) {
         List<Review> reviews = eventService.getAllReviews(id);
         return ResponseEntity.ok(ListReviewResponse(reviews));
     }
@@ -192,7 +190,7 @@ public class EventController {
             description = "Return all events with owner_id = to a given user_id"
     )
     public ResponseEntity<List<EventResponse>> getAllByOwnerUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
-        List<Event> events =  eventService.getAllEventsByOwnerId(id);
+        List<Event> events = eventService.getAllEventsByOwnerId(id);
         return ResponseEntity.ok(ListEventResponse(events));
     }
 
@@ -201,7 +199,7 @@ public class EventController {
     @GetMapping("upcoming-events/participations/user/{id}")
     public ResponseEntity<List<EventResponse>> getAllUpcomingEventFromUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
         System.out.println("controller id : " + id);
-        List<Event> events =eventService.getAllUpcomingEventsByUserIdParticipation(id);
+        List<Event> events = eventService.getAllUpcomingEventsByUserIdParticipation(id);
         return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
 
@@ -209,10 +207,9 @@ public class EventController {
     @Operation(summary = "Get all past events a user participate to by userId")
     @GetMapping("past-events/participations/user/{id}")
     public ResponseEntity<List<EventResponse>> getAllPastEventFromUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
-        List<Event> events =eventService.getAllPastEventsByUserIdParticipation(id);
+        List<Event> events = eventService.getAllPastEventsByUserIdParticipation(id);
         return new ResponseEntity<>(ListEventResponse(events), HttpStatus.OK);
     }
-
 
 
 }

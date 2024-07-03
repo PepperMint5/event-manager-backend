@@ -1,11 +1,6 @@
 package com.dauphine.event_manager_backend.dto;
 
 
-import com.dauphine.event_manager_backend.model.Category;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
 import java.sql.Date;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -36,7 +31,9 @@ public class EventRequest {
         return date;
     }
 
-    public LocalTime getTime() { return time; }
+    public LocalTime getTime() {
+        return time;
+    }
 
     public String getDescription() {
         return description;

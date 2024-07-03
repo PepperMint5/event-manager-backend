@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_data" )
+@Table(name = "user_data")
 public class User {
     @Id
     @Column(name = "id")
@@ -17,10 +17,11 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Column(name= "password")
+    @Column(name = "password")
     private String password;
 
-    public  User(){}
+    public User() {
+    }
 
     public User(String username, String password) {
         this.id = UUID.randomUUID();

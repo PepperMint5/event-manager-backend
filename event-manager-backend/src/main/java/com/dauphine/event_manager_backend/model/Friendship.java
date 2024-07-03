@@ -1,9 +1,6 @@
 package com.dauphine.event_manager_backend.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "friendship")

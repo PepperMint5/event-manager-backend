@@ -1,11 +1,6 @@
 package com.dauphine.event_manager_backend.dto;
 
 
-import com.dauphine.event_manager_backend.model.Category;
-import com.dauphine.event_manager_backend.model.Event;
-import com.dauphine.event_manager_backend.model.User;
-
-import java.sql.Date;
 import java.util.UUID;
 
 public class ReviewRequest {

@@ -9,7 +9,9 @@ public class ParticipationId implements Serializable {
     private UUID userId;
     private UUID eventId;
 
-    public  ParticipationId(){}
+    public ParticipationId() {
+    }
+
     public ParticipationId(UUID userId, UUID eventId) {
         this.userId = userId;
         this.eventId = eventId;

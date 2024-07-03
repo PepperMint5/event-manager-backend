@@ -29,7 +29,7 @@ public class Event {
     private Date date;
 
     @Column(name = "time")
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime time;
 
     @Column(name = "description")
@@ -47,9 +47,13 @@ public class Event {
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public void setId(UUID id) { this.id = id; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -116,13 +120,21 @@ public class Event {
     }
 
 
-    public LocalTime getTime() { return time; }
+    public LocalTime getTime() {
+        return time;
+    }
 
-    public void setTime(LocalTime time) { this.time = time; }
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
 
-    public Date getLast_updated() { return last_updated; }
+    public Date getLast_updated() {
+        return last_updated;
+    }
 
-    public void setLast_updated(Date last_updated) { this.last_updated = last_updated; }
+    public void setLast_updated(Date last_updated) {
+        this.last_updated = last_updated;
+    }
 
 
     public Event(String title, String city, String address, Date date, LocalTime time, String description, LocalDateTime last_updated, Category category, User owner) {
@@ -138,7 +150,8 @@ public class Event {
         this.owner = owner;
     }
 
-    public Event(){}
+    public Event() {
+    }
 
     @Override
     public String toString() {
