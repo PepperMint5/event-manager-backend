@@ -28,4 +28,6 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     """
     )
     List<Review> getEvenByUser(UUID id);
+
+    List<Review> findByUserId(UUID userId);
 }
