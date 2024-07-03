@@ -98,11 +98,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public User createUser(User user) {
-        user.setId(UUID.randomUUID());
-        return userRepository.save(user);
-    }
 
     @Override
     public Boolean getIsParticipating(UUID user_id, UUID event_id) throws UserNotFoundByIdException, EventNotFoundByIdException {
