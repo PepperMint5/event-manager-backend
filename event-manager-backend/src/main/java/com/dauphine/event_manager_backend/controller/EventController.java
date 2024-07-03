@@ -88,7 +88,6 @@ public class EventController {
     }
 
 
-    //TODO on l'utilise celui là ??
     @Operation(summary = "Get all Events by user ID")
     @GetMapping("/user/{id}")
     public ResponseEntity<List<EventResponse>> getEventsByUserId(@PathVariable UUID id) throws UserNotFoundByIdException {
